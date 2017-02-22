@@ -3,3 +3,16 @@ Algoritimos para detectar imagens...
 http://www.inf.pucrs.br/~pinho/CG/Aulas/Img/IMG.htm
 http://www.inf.ufsc.br/~aldo.vw/patrec/imagens.html
 http://revistaseletronicas.pucrs.br/ojs/index.php/hifen/article/view/4619/3492
+
+
+Links interessantes
+
+O que mudou no javascript
+http://es6-features.org/#IteratorForOfOperator
+
+Sons
+http://www.classicgaming.cc/classics/pac-man/sounds
+
+
+http://www.masswerk.at/JavaPac/pacman-howto.html
+https://doc.qt.io/qt-5/qtscript-script-context2d-scripts-pacman-js.html
