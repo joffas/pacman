@@ -7,7 +7,7 @@ class Game {
         this.height = 500;
         this.pacman = null;
         this.azul = null;
-        this.bloco = null;
+        this.Mapa = null;
         this.somGame = new Audio('pacman_chomp.wav');
         //Atores
         //this.pacman = null;
@@ -55,20 +55,26 @@ class Game {
             this.pacman = new Pacman('pacman',this.ctx);
             //Fantasma
             this.azul = new Fantasma('fantasma',this.ctx);
-            this.azul.left = 500;
-            //this.bloco = new Bloco('bloco', this.ctx);
+            this.azul.left = 500;            
 			
             //Adicionando ao array controlador
             this.atores = new Array();
             this.atores.push(this.pacman);
 //            this.atores.push(this.bloco);
 			this.atores.push(this.azul);
+            //this.atores.push(this.mapa);
+            console.log(this.atores);
+
+            this.mapa = new Mapa(this.ctx, this);
+            console.log(this.atores);
+            /*
             for (var i = 0; i < 10; i++) {
                 this.bloco = new Bloco('bloco',this.ctx);
-                this.bloco.left = (i*this.bloco.width);
+                this.bloco.left = (i*this.bloco.width)+this.bloco.left;
                 this.bloco.top = 0;
                 this.atores.push(this.bloco);
             }
+            */
 
 /*
             this.azul = new Azul.Class;
