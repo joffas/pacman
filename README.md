@@ -1,4 +1,6 @@
-[![PACMAN JavaScrip ECMAScript 6]]
+[![Build Status](https://travis-ci.org/OTRS/otrs.svg?branch=master)](https://github.com/joffas/pacman.git)
+
+PACMAN JavaScrip ECMAScript 6
 
 (Proximos Passos)
 
@@ -26,8 +28,6 @@
   5.1 - Pause
   5.2 - Opção multiplayer no mesmo map
 
-
-[![Build Status](https://travis-ci.org/OTRS/otrs.svg?branch=master)](https://travis-ci.org/OTRS/otrs)
 
 What is OTRS?
 =============
