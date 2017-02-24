@@ -1,4 +1,4 @@
-[PACMAN JavaScrip ECMAScript 6]
+[![PACMAN JavaScrip ECMAScript 6]]
 
 (Proximos Passos)
 
