@@ -17,4 +17,4 @@ http://www.classicgaming.cc/classics/pac-man/sounds
 http://www.masswerk.at/JavaPac/pacman-howto.html
 https://doc.qt.io/qt-5/qtscript-script-context2d-scripts-pacman-js.html
 
-pamela
+https://code.visualstudio.com/docs/?dv=win
