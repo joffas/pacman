@@ -6,45 +6,75 @@ class Mapa {
 		self.atores.push(bloco);
 		//bloco.left = 100;
 
-/* bug
-    for (var i = 0; i < 14; i++) {
-        bloco = new Bloco('bloco',ctx);
-        bloco.left = i*bloco.height;
-        bloco.top = i*bloco.height;
-        self.atores.push(bloco);
-    } 
-    */   
+    /* bug
+        for (var i = 0; i < 14; i++) {
+            bloco = new Bloco('bloco',ctx);
+            bloco.left = i*bloco.height;
+            bloco.top = i*bloco.height;
+            self.atores.push(bloco);
+        } 
+        */   
 
-		//cima
-    for (var i = 0; i < 18; i++) {
-        bloco = new Bloco('bloco',ctx);
-        bloco.left = i*bloco.width;
-        self.atores.push(bloco);
-    }
+        //cima   
+        for (var i = 0; i < 44; i++) {
+            bloco = new Bloco('bloco',ctx);        
+            bloco.left = i*bloco.width;
+            self.atores.push(bloco);
+        }
 
-    //Esquerda
-    for (var i = 0; i < 14; i++) {
-        bloco = new Bloco('bloco',ctx);
-        bloco.top = i*bloco.height;
-        self.atores.push(bloco);
-    } 
+        //Esquerda
+        for (var i = 0; i < 30; i++) {
+            bloco = new Bloco('bloco',ctx);
+            bloco.top = (i*bloco.height)+bloco.height;
+            self.atores.push(bloco);
+        } 
 
-    //Direita
-    for (var i = 0; i < 15; i++) {
-        bloco = new Bloco('bloco',ctx);
-        bloco.left = 18*bloco.width;
-        bloco.top = i*bloco.height;
-        self.atores.push(bloco);
-    }        
+        //Direita
+        for (var i = 0; i <31; i++) {
+            bloco = new Bloco('bloco',ctx);
+            bloco.top = 31*bloco.height;
+            bloco.left = 43*bloco.width;
+            bloco.top = i*bloco.height;
+            self.atores.push(bloco);
+        }                
 
-    //baixo
-    for (var i = 0; i < 18; i++) {
-        bloco = new Bloco('bloco',ctx);
-        bloco.top = 14*bloco.width;
-        bloco.left = i*bloco.width;
-        self.atores.push(bloco);
-    }    
+        //baixo
+        for (var i = 0; i < 44; i++) {
+            bloco = new Bloco('bloco',ctx);
+            bloco.top = 31*bloco.height;
+            bloco.left = i*bloco.width;
+            self.atores.push(bloco);
+        }    
 
-	}	
+
+        //Cima baixo esquerda
+        //Esquerda
+        for (var i = 0; i < 44; i++) {
+            if (!(i % 1)){
+                bloco = new Bloco('bloco',ctx);
+                //bloco.height = 32;
+                bloco.top = (i*bloco.height)+bloco.height;
+                bloco.left = bloco.width*22;
+                self.atores.push(bloco);
+            }
+        } 
+
+
+        bloco = new Bloco('bloco',ctx);        
+        bloco.left = 200;
+        bloco.top = 0;
+        bloco.height = 200;
+        bloco.width = 20;
+        self.atores.push(bloco);
+
+        bloco = new Bloco('bloco',ctx);        
+        bloco.left = 200;
+        bloco.top = 0;
+        bloco.height = 200;
+        bloco.width = 20;
+        self.atores.push(bloco);
+        
+
+	}
 
 }

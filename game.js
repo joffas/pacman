@@ -4,7 +4,7 @@ class Game {
         this.name = name;
         this.atores = null;
         this.width  = 800;
-        this.height = 500;
+        this.height = 600;
         this.pacman = null;
         this.azul = null;
         this.Mapa = null;

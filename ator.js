@@ -36,16 +36,16 @@ class Ator {
 	colidiu(outro){
 		if (this.detectarColisao(outro)==true){
 			if (this.paraDireita){
-				this.left = this.left-1;
+				this.left = this.left-2;
 			}
 			if (this.paraEsquerda){
-				this.left = this.left+1;
+				this.left = this.left+2;
 			}			
 			if (this.paraCima){
-				this.top = this.top+1;
+				this.top = this.top+2;
 			}			
 			if (this.paraBaixo){
-				this.top = this.top-1;
+				this.top = this.top-2;
 			}		
 		}
 	}

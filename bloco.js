@@ -5,8 +5,8 @@ class Bloco extends Ator {
 		super(tipoAtor, ctx);
 		this.tipo = tipoAtor;
 		this.spriteName = 'cenario.png';		
-		this.height = 32;
-		this.width = 32;
+		this.height = 18;
+		this.width = 18;
 	}	
 
 	paint(){
