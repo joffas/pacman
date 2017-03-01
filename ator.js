@@ -12,6 +12,7 @@ class Ator {
 		this.sprite = new Image();
 		this.sprite.src = 'sprites.png';
 		this.direcaoAnterior = 0;				
+		this.morreu = false;
 	}
 		
 	dead(outro){		
@@ -37,16 +38,16 @@ class Ator {
 	colidiu(outro){
 		if (this.detectarColisao(outro)==true){
 			if (this.paraDireita){
-				this.left = this.left-2;
+				this.left = this.left-this.velocidade;
 			}
 			if (this.paraEsquerda){
-				this.left = this.left+2;
+				this.left = this.left+this.velocidade;
 			}			
 			if (this.paraCima){
-				this.top = this.top+2;
+				this.top = this.top+this.velocidade;
 			}			
 			if (this.paraBaixo){
-				this.top = this.top-2;
+				this.top = this.top-this.velocidade;
 			}		
 			return this.direcao;
 		}else{
