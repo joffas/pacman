@@ -7,11 +7,11 @@ class Game {
         this.height = 600;
         this.pacman = null;
         this.azul = null;
+        this.vermelho = null;
         this.Mapa = null;
         this.somGame = new Audio('pacman_chomp.wav');
         //Atores
         //this.pacman = null;
-        this.azul = null;
         this.atores = new Array();
     }
 
@@ -54,45 +54,50 @@ class Game {
             //Pacman
             this.pacman = new Pacman('pacman',this.ctx);
             //Fantasma
+            this.vermelho = new Fantasma('fantasma',this.ctx);
+            this.vermelho.left = 500;
+            this.vermelho.top = 400;
+            this.vermelho.velocidade = 2;            
+			this.vermelho.direcao = 37;
+            this.vermelho.imagem = 0; 
+
+            this.verde = new Fantasma('fantasma',this.ctx);
+            this.verde.left = 500;
+            this.verde.top = 400;
+            this.verde.velocidade = 2;            
+			this.verde.direcao = 38;
+            this.verde.imagem = 64;
+
+            this.rosa = new Fantasma('fantasma',this.ctx);
+            this.rosa.left = 500;
+            this.rosa.top = 400;
+            this.rosa.velocidade = 2;            
+			this.rosa.direcao = 39;
+            this.rosa.imagem = 130;
+
+            this.roxo = new Fantasma('fantasma',this.ctx);
+            this.roxo.left = 500;
+            this.roxo.top = 400;
+            this.roxo.velocidade = 2;            
+			this.roxo.direcao = 40;
+            this.roxo.imagem = 254;
+
             this.azul = new Fantasma('fantasma',this.ctx);
-            this.azul.left = 500;            
-			
+            this.azul.left = 500;
+            this.azul.top = 400;
+            this.azul.velocidade = 2;            
+			this.azul.direcao = 40;
+            this.azul.imagem = 190;
+
             //Adicionando ao array controlador
             this.atores = new Array();
             this.atores.push(this.pacman);
-//            this.atores.push(this.bloco);
 			this.atores.push(this.azul);
-            //this.atores.push(this.mapa);
-            console.log(this.atores);
-
+            this.atores.push(this.vermelho);
+            this.atores.push(this.verde);
+            this.atores.push(this.rosa);
+            this.atores.push(this.roxo);
             this.mapa = new Mapa(this.ctx, this);
-            console.log(this.atores);
-            /*
-            for (var i = 0; i < 10; i++) {
-                this.bloco = new Bloco('bloco',this.ctx);
-                this.bloco.left = (i*this.bloco.width)+this.bloco.left;
-                this.bloco.top = 0;
-                this.atores.push(this.bloco);
-            }
-            */
-
-/*
-            this.azul = new Azul.Class;
-            this.azul.setCanvasAtor(this.ctx);
-            this.azul.setX(600);
-            this.azul.setY(200);
-            this.atores.push(this.azul);
-
-            for (var i = 0; i < 1; i++) {
-                this.bloco = new Bloco.Class;
-                this.bloco.setCanvasAtor(this.ctx);
-                this.bloco.setW(600);
-                this.bloco.setH(20);
-                this.bloco.setX(i*this.bloco.getW());
-                this.bloco.setY(0);
-                this.atores.push(this.bloco);
-            }
-			*/
             return setInterval(this.draw, 10, this/*Deve ser passado por parametro para usar no draw*/);
         }
     }
@@ -101,27 +106,39 @@ class Game {
        self.clear();
 	   
        for (var i in self.atores){
-          if (self.atores[i] instanceof Fantasma)
+          if (self.atores[i] instanceof Fantasma){
             (self.pacman.dead(self.atores[i]))
+          } 
           else
-            if (self.atores[i] instanceof Bloco)
-               (self.pacman.colidiu(self.atores[i]));
+            if (self.atores[i] instanceof Bloco){
+                self.pacman.colidiu(self.atores[i]);
+                self.azul.tomadaDeDirecao(self.azul.colidiu(self.atores[i]));
+                self.vermelho.tomadaDeDirecao(self.vermelho.colidiu(self.atores[i]));
+                self.verde.tomadaDeDirecao(self.verde.colidiu(self.atores[i]));
+                self.rosa.tomadaDeDirecao(self.rosa.colidiu(self.atores[i]));
+                self.roxo.tomadaDeDirecao(self.roxo.colidiu(self.atores[i]));
+                  //this.azul.direcao = 38
+                  //console.log('colidiu');
+              }
+        
 
           if (self.pacman.morreu==false){
               self.somGame.play();
           }
-		  
+		  /*
 		  if (self.atores[i] instanceof Fantasma){
 			if (self.atores[i].left>400){
 				self.atores[i].velocidade = 2;
 				self.atores[i].direcao = 37;
 			}else if (self.atores[i].left<=40){
-				self.atores[i].velocidade = 4;
-				self.atores[i].direcao = 39;;
+				self.atores[i].velocidade = 2;
+				self.atores[i].direcao = 39;
 			}
-		}
-		  
-          self.atores[i].updatePosicaoXY();
+		}*/
+                
+         
+ 
+            self.atores[i].updatePosicaoXY();
           self.atores[i].paint();
        }
 

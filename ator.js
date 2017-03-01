@@ -10,7 +10,8 @@ class Ator {
 		this.height = 32;
 		this.canvas = ctx;
 		this.sprite = new Image();
-		this.sprite.src = 'sprites.png';				
+		this.sprite.src = 'sprites.png';
+		this.direcaoAnterior = 0;				
 	}
 		
 	dead(outro){		
@@ -47,7 +48,25 @@ class Ator {
 			if (this.paraBaixo){
 				this.top = this.top-2;
 			}		
+			return this.direcao;
+		}else{
+			return 0;
 		}
+	}
+
+	vaiColidir(outro){
+		
+		if ((this.left==undefined)||
+			(outro.left==undefined)) 
+			return false;
+
+		if  ((this.left+this.velocidade+this.width<outro.left)||
+			(this.left+this.velocidade>outro.left+outro.width)||
+			(this.top+this.velocidade+this.height<outro.top)||
+			(this.top+this.velocidade>outro.top+outro.height)) 
+			return false;
+
+		return true;
 	}
 
 	get tipo(){
@@ -86,6 +105,29 @@ class Ator {
 			this._direcao = 4;//Baixo
 		}
 	}
+
+	tomadaDeDirecao(Value){	 
+		//console.log(this._direcao);
+		//Math.random(4);
+		
+		if (Value == 1){ 
+			//this._direcao = 3;
+			this._direcao = Math.floor(Math.random() * 4 + 1);
+			this.direcaoAnterior = 1;
+		}else if (Value == 2){
+			//this._direcao = 4;
+			this._direcao = Math.floor(Math.random() * 4 + 1);
+			this.direcaoAnterior = 2;
+		}else if (Value == 3){
+			//this._direcao = 1;
+			this._direcao = Math.floor(Math.random() * 4 + 1);
+			this.direcaoAnterior = 3;
+		}else if (Value == 4){
+			//this._direcao = 2;
+			this._direcao = Math.floor(Math.random() * 4 + 1);
+			this.direcaoAnterior = 4;
+		}
+	}	
 		
 	updatePosicaoXY(){
 		if (this.direcao==1) { this.left += this.velocidade }//Direita

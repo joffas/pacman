@@ -8,6 +8,7 @@ class Fantasma extends Ator {
 		this.tempoOlhos = 0;
 		this.left = 50;
 		this.top = 50;
+		this.imagem = 254;
 	}	
 	
 	get tempoImagem(){
@@ -44,7 +45,7 @@ class Fantasma extends Ator {
 						this.tempoImagem = 0;
 						this.canvas.drawImage(this.sprite,
 							//corte boca aberta - Azul
-							254,0,32,32,			
+							this.imagem,0,32,32,			
 							//onde ele esta agora
 							this.left, this.top,
 							//tamanho do personagem
@@ -56,7 +57,7 @@ class Fantasma extends Ator {
 						this.tempoImagem = 64;						
 						this.canvas.drawImage(this.sprite,
 							//corte boca aberta - Azul
-							254,64,32,32,			
+							this.imagem,64,32,32,			
 							//onde ele esta agora
 							this.left, this.top,
 							//tamanho do personagem
@@ -72,7 +73,7 @@ class Fantasma extends Ator {
 						this.tempoImagem = 32;
 						this.canvas.drawImage(this.sprite,
 							//corte boca aberta - Azul
-							254,32,32,32,			
+							this.imagem,32,32,32,			
 							//onde ele esta agora
 							this.left, this.top,
 							//tamanho do personagem
@@ -84,7 +85,7 @@ class Fantasma extends Ator {
 						this.tempoImagem = 96;
 						this.canvas.drawImage(this.sprite,
 							//corte boca aberta - Azul
-							254,96,32,32,			
+							this.imagem,96,32,32,			
 							//onde ele esta agora
 							this.left, this.top,
 							//tamanho do personagem
@@ -96,7 +97,7 @@ class Fantasma extends Ator {
 			} else{  
 				this.canvas.drawImage(this.sprite,
 					//corte boca aberta - Azul
-					286,this.tempoImagem,32,32,			
+					this.imagem+32,this.tempoImagem,32,32,			
 					//onde ele esta agora
 					this.left, this.top,
 					//tamanho do personagem
@@ -108,7 +109,7 @@ class Fantasma extends Ator {
 				
 			this.canvas.drawImage(this.sprite,
 				//corte boca aberta - Azul
-				254,this.tempoImagem,32,32,			
+				this.imagem+32,this.tempoImagem,32,32,			
 				//onde ele esta agora
 				this.left, this.top,
 				//tamanho do personagem

@@ -47,33 +47,27 @@ class Mapa {
         }    
 
 
-        //Cima baixo esquerda
-        //Esquerda
-        for (var i = 0; i < 44; i++) {
-            if (!(i % 1)){
-                bloco = new Bloco('bloco',ctx);
-                //bloco.height = 32;
-                bloco.top = (i*bloco.height)+bloco.height;
-                bloco.left = bloco.width*22;
-                self.atores.push(bloco);
-            }
-        } 
+        //Meio baixo
+        bloco = new Bloco('bloco',ctx);
+        bloco.height = 180;
+        bloco.top = 16;
+        bloco.left = bloco.width*22;
+        self.atores.push(bloco);
 
 
         bloco = new Bloco('bloco',ctx);        
-        bloco.left = 200;
-        bloco.top = 0;
-        bloco.height = 200;
-        bloco.width = 20;
+        bloco.left = 61;
+        bloco.top = 60;
+        bloco.height = 60;
+        bloco.width = 100;
         self.atores.push(bloco);
 
         bloco = new Bloco('bloco',ctx);        
-        bloco.left = 200;
-        bloco.top = 0;
-        bloco.height = 200;
-        bloco.width = 20;
-        self.atores.push(bloco);
-        
+        bloco.left = 220;
+        bloco.top = 60;
+        bloco.height = 60;
+        bloco.width = 120;
+        self.atores.push(bloco);        
 
 	}
 
