@@ -12,16 +12,7 @@ class Ponto extends Ator {
 	paint(){
 		super.paint;
 		
-		var bloco_Horizontal = [244,0,60,32];
-		var bloco_vertical = [190,0,32,92];
-		var bloco_quadrado1 = [0,0,92,92];
-		var bloco_quadrado2 = [96,0,92,92];
-		var bloco_quadrado3 = [228,36,24,24];
-		var bloco_vitamina1 = [228,70,24,24];
-		var bloco_vitamina2 = [260,70,24,24];
-        var bloco_ponto = [296,72,14,14];
-
-		var posSprite = bloco_ponto;		
+		var posSprite = [296,72,14,14];
         if (!this.morreu){
 		    this.canvas.drawImage(this.sprite,
 			    //corte do sprite
