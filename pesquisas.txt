@@ -18,3 +18,7 @@ http://www.masswerk.at/JavaPac/pacman-howto.html
 https://doc.qt.io/qt-5/qtscript-script-context2d-scripts-pacman-js.html
 
 https://code.visualstudio.com/docs/?dv=win
+
+
+//animações exemplo em css com javascript
+https://codepen.io

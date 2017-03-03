@@ -128,6 +128,11 @@ class Game {
           if (self.pacman.morreu==false){
               self.somGame.play();
           }
+
+		  if (self.atores[i] instanceof Fantasma)
+			self.atores[i].fraco = self.atores[i].left<100;
+			     
+          
 		  /*
 		  if (self.atores[i] instanceof Fantasma){
 			if (self.atores[i].left>400){

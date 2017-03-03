@@ -13,12 +13,16 @@ class Ator {
 		this.sprite.src = 'sprites.png';
 		this.direcaoAnterior = 0;				
 		this.morreu = false;
+		this.fraco = false;
 	}
-		
-	dead(outro){		
-		if (this.detectarColisao(outro))
-			return this.morreu = true;
-	}						
+	
+	dead(outro){
+		if (outro.fraco!=true){
+			if (this.detectarColisao(outro)){
+				return this.morreu = true;
+			}
+		}
+	}
 		
 	detectarColisao(outro){
 		
@@ -89,7 +93,14 @@ class Ator {
 	set spriteName(Nome){
 		this.sprite.src = Nome;
 	}		
-		
+
+	get fraco(){
+		return this._fraco;
+	}	
+
+	set fraco(value){
+		this._fraco = value;
+	}		
 		
 	set direcao(tecla){		
 		this._direcao = 0;//parado
