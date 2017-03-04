@@ -1,3 +1,8 @@
+const _DIREITA = 1;
+const _ESQUERDA = 2;
+const _CIMA = 3;
+const _BAIXO = 4;
+
 class Ator {
 	
 	constructor(tipoAtor, ctx) {
@@ -105,47 +110,37 @@ class Ator {
 	set direcao(tecla){		
 		this._direcao = 0;//parado
 		if (tecla == 39){ 
-			this._direcao = 1;//Direita
+			this._direcao = _DIREITA;//Direita
 		}
 		if (tecla == 37){
-			this._direcao = 2;//Esquerda
+			this._direcao = _ESQUERDA;//Esquerda
 		}
 		if (tecla == 38){ 
-			this._direcao = 3;//Cima
+			this._direcao = _CIMA;//Cima
 		}
 		if (tecla == 40){ 
-			this._direcao = 4;//Baixo
+			this._direcao = _BAIXO;//Baixo
 		}
 	}
 
 	tomadaDeDirecao(Value){	 
-		//console.log(this._direcao);
-		//Math.random(4);
-		
-		if (Value == 1){ 
-			//this._direcao = 3;
+		if (Value == _DIREITA){ 
 			this._direcao = Math.floor(Math.random() * 4 + 1);
-			this.direcaoAnterior = 1;
-		}else if (Value == 2){
-			//this._direcao = 4;
+		}else if (Value == _ESQUERDA){
 			this._direcao = Math.floor(Math.random() * 4 + 1);
-			this.direcaoAnterior = 2;
-		}else if (Value == 3){
-			//this._direcao = 1;
+		}else if (Value == _CIMA){
 			this._direcao = Math.floor(Math.random() * 4 + 1);
 			this.direcaoAnterior = 3;
-		}else if (Value == 4){
-			//this._direcao = 2;
+		}else if (Value == _BAIXO){
 			this._direcao = Math.floor(Math.random() * 4 + 1);
-			this.direcaoAnterior = 4;
 		}
 	}	
 		
 	updatePosicaoXY(){
-		if (this.direcao==1) { this.left += this.velocidade }//Direita
-		if (this.direcao==2) { this.left -= this.velocidade }//Esquerda
-		if (this.direcao==3) { this.top -= this.velocidade }//Cima
-		if (this.direcao==4) { this.top += this.velocidade }//Baixo
+		if (this.direcao==_DIREITA) { this.left += this.velocidade }//Direita
+		if (this.direcao==_ESQUERDA) { this.left -= this.velocidade }//Esquerda
+		if (this.direcao==_CIMA) { this.top -= this.velocidade }//Cima
+		if (this.direcao==_BAIXO) { this.top += this.velocidade }//Baixo
 	}
 
 	get direcao(){
@@ -205,19 +200,19 @@ class Ator {
 	}
 		
 	get paraDireita(){ 
-		return this.direcao==1; 
+		return this.direcao==_DIREITA; 
 	}
 		
 	get paraEsquerda(){ 
-		return this.direcao==2; 
+		return this.direcao==_ESQUERDA; 
 	}				
 		
 	get paraCima(){ 
-		return this.direcao==3; 
+		return this.direcao==_CIMA; 
 	}				
 
 	get paraBaixo(){ 
-		return this.direcao==4; 
+		return this.direcao==_BAIXO; 
 	}				
 
 }
