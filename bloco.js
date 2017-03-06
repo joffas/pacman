@@ -26,7 +26,7 @@ class Bloco extends Ator {
 /*	this.width = posSprite[2];
 		this.height = posSprite[3];
 		*/
-		
+
 		this.canvas.drawImage(this.sprite,
 			//corte do sprite
 			posSprite[0],posSprite[1],posSprite[2],posSprite[3],			
@@ -34,6 +34,6 @@ class Bloco extends Ator {
 			this.left, this.top,
 			//tamanho do personagem
 			this.width,this.height
-			);	
+			);				
 	}
 }
