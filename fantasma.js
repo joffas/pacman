@@ -1,4 +1,3 @@
-
 class Fantasma extends Ator {
 	
 	constructor(tipoAtor, ctx) {
@@ -28,26 +27,22 @@ class Fantasma extends Ator {
 		var top = 0;
 		switch (this.direcao) {
 		case _DIREITA://direita
-			top = 0;
-			break;
+			top = 0; break;
 		case _ESQUERDA://esquerda
-			top = 64;
-			break;
+			top = 64; break;
 		case _CIMA://cima
-			top = 96;
-			break;
+			top = 96; break;
 		case _BAIXO://baixo
-			top = 32;
-			break;					
-		default:
-			break;
+			top = 32; break;					
+		default: break;
 		}
 		if (this.fraco){
 			top = 0;			 
 			left = 384;
 		}
+		if (!this.morreu)
 
-		for (var i=0; i<=25; i++){  
+		for (var i=0; i<=25; i++){
 			this.canvas.moveTo(this.left, this.top);
 				this.canvas.drawImage(this.sprite,
 					//corte boca aberta - Azul

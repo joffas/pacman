@@ -3,6 +3,7 @@ class Mapa {
 	constructor(ctx, self) {
 		var bloco = null;
         var ponto = null;
+        var vitamina = null;
 		var bloco = new Bloco('bloco',ctx);
 		self.atores.push(bloco);
         //cima   
@@ -70,6 +71,12 @@ class Mapa {
             ponto.top = 292;
             self.atores.push(ponto);            
         }
+
+        vitamina = new Vitamina('Vitamina',ctx);        
+        vitamina.left = 60;
+        vitamina.top = 360;
+        self.atores.push(vitamina);
+        
 
 
 	}

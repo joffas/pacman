@@ -51,20 +51,21 @@ class Game {
 
             this.canvas.width = this.width;
             this.canvas.height = this.height;
+            this.canvas.c
             //Pacman
             this.pacman = new Pacman('pacman',this.ctx);
             //Fantasma
             this.vermelho = new Fantasma('fantasma',this.ctx);
             this.vermelho.left = 500;
             this.vermelho.top = 400;
-            this.vermelho.velocidade = 16;            
+            this.vermelho.velocidade = 4;            
 			this.vermelho.direcao = 37;
             this.vermelho.imagem = 0; 
 
             this.verde = new Fantasma('fantasma',this.ctx);
             this.verde.left = 500;
             this.verde.top = 400;
-            this.verde.velocidade = 5;            
+            this.verde.velocidade = 2;            
 			this.verde.direcao = 38;
             this.verde.imagem = 64;
 
@@ -78,7 +79,7 @@ class Game {
             this.roxo = new Fantasma('fantasma',this.ctx);
             this.roxo.left = 500;
             this.roxo.top = 400;
-            this.roxo.velocidade = 4;            
+            this.roxo.velocidade = 2;            
 			this.roxo.direcao = 40;
             this.roxo.imagem = 254;
 
@@ -106,12 +107,25 @@ class Game {
        self.clear();
 	   
        for (var i in self.atores){
+          if (self.atores[i] instanceof Vitamina){
+            if (self.atores[i].dead(self.pacman)){
+                for (var x in self.atores){
+                    if (self.atores[x] instanceof Fantasma)
+			            self.atores[x].fraco = true;
+                }
+            }
+          }                        
           if (self.atores[i] instanceof Ponto){
             self.atores[i].dead(self.pacman);
-          }             
+          } 
+          if (self.atores[i] instanceof Fantasma){
+            if (self.atores[i].fraco){
+                (self.atores[i].dead(self.pacman))
+            }
+          }                                 
           if (self.atores[i] instanceof Fantasma){
             (self.pacman.dead(self.atores[i]))
-          } 
+          }           
           else
             if (self.atores[i] instanceof Bloco){
                 self.pacman.colidiu(self.atores[i]);
@@ -128,25 +142,8 @@ class Game {
           if (self.pacman.morreu==false){
               self.somGame.play();
           }
-
-		  if (self.atores[i] instanceof Fantasma)
-			self.atores[i].fraco = self.atores[i].left<100;
 			     
-          
-		  /*
-		  if (self.atores[i] instanceof Fantasma){
-			if (self.atores[i].left>400){
-				self.atores[i].velocidade = 2;
-				self.atores[i].direcao = 37;
-			}else if (self.atores[i].left<=40){
-				self.atores[i].velocidade = 2;
-				self.atores[i].direcao = 39;
-			}
-		}*/
-                
-         
- 
-            self.atores[i].updatePosicaoXY();
+          self.atores[i].updatePosicaoXY();
           self.atores[i].paint();
        }
 
@@ -164,5 +161,3 @@ document.onkeyup=function(event){game.keyUp(event)};
 function init() {
 	game.init();
 }
-
-//https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Drawing_shapes
