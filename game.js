@@ -103,6 +103,21 @@ class Game {
     }
 
     draw(self){
+        if (!self.inicio){
+            self.clear();
+		    var sprite = new Image();
+		    sprite.src = 'inicio.png';        
+            self.ctx.drawImage(sprite,
+                //corte boca aberta - pacman
+                0,0,333,198,
+                //onde ele esta agora
+                100, 100,
+                //tamanho do personagem
+                333,198
+                );
+        }
+        
+        
 	   if (self.inicio){
            self.clear();
         for (var i in self.atores){
