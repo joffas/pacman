@@ -9,20 +9,14 @@ class Game {
         this.azul = null;
         this.vermelho = null;
         this.Mapa = null;
+        this.somInicio = new Audio('pacman_beginning.wav');
         this.somGame = new Audio('pacman_chomp.wav');
         //Atores
         //this.pacman = null;
+        this.inicio = false;
         this.atores = new Array();
     }
 
-    get fullName() {
-        return this.name + "something";
-    }
-
-    set fullName(value) {
-        this.name = value;
-    }
-	
 	set pacman(value){
 		this._pacman = value;
 	}
@@ -32,6 +26,10 @@ class Game {
 	}
 
     keyDown(evt){
+        if (evt.keyCode==13){
+            this.inicio = true;
+            this.somInicio.play();
+        }
         this.pacman.direcao = evt.keyCode;//true
     }
 
@@ -48,10 +46,11 @@ class Game {
         if (this.canvas.getContext) {
 
             this.ctx = this.canvas.getContext("2d");
-
             this.canvas.width = this.width;
             this.canvas.height = this.height;
-            this.canvas.c
+           
+            
+            //this.canvas.c
             //Pacman
             this.pacman = new Pacman('pacman',this.ctx);
             //Fantasma
@@ -104,50 +103,51 @@ class Game {
     }
 
     draw(self){
-       self.clear();
-	   
-       for (var i in self.atores){
-          if (self.atores[i] instanceof Vitamina){
-            if (self.atores[i].dead(self.pacman)){
-                for (var x in self.atores){
-                    if (self.atores[x] instanceof Fantasma)
-			            self.atores[x].fraco = true;
+	   if (self.inicio){
+           self.clear();
+        for (var i in self.atores){
+            if (self.atores[i] instanceof Vitamina){
+                if (self.atores[i].dead(self.pacman)){
+                    for (var x in self.atores){
+                        if (self.atores[x] instanceof Fantasma)
+                            self.atores[x].fraco = true;
+                    }
                 }
-            }
-          }                        
-          if (self.atores[i] instanceof Ponto){
-            self.atores[i].dead(self.pacman);
-          } 
-          if (self.atores[i] instanceof Fantasma){
-            if (self.atores[i].fraco){
-                (self.atores[i].dead(self.pacman))
-            }
-          }                                 
-          if (self.atores[i] instanceof Fantasma){
-            (self.pacman.dead(self.atores[i]))
-          }           
-          else
-            if (self.atores[i] instanceof Bloco){
-                self.pacman.colidiu(self.atores[i]);
-                self.azul.tomadaDeDirecao(self.azul.colidiu(self.atores[i]));
-                self.vermelho.tomadaDeDirecao(self.vermelho.colidiu(self.atores[i]));
-                self.verde.tomadaDeDirecao(self.verde.colidiu(self.atores[i]));
-                self.rosa.tomadaDeDirecao(self.rosa.colidiu(self.atores[i]));
-                self.roxo.tomadaDeDirecao(self.roxo.colidiu(self.atores[i]));
-                  //this.azul.direcao = 38
-                  //console.log('colidiu');
-              }
-        
+            }                        
+            if (self.atores[i] instanceof Ponto){
+                self.atores[i].dead(self.pacman);
+            } 
+            if (self.atores[i] instanceof Fantasma){
+                if (self.atores[i].fraco){
+                    (self.atores[i].dead(self.pacman))
+                }
+            }                                 
+            if (self.atores[i] instanceof Fantasma){
+                (self.pacman.dead(self.atores[i]))
+            }           
+            else
+                if (self.atores[i] instanceof Bloco){
+                    self.pacman.colidiu(self.atores[i]);
+                    self.azul.tomadaDeDirecao(self.azul.colidiu(self.atores[i]));
+                    self.vermelho.tomadaDeDirecao(self.vermelho.colidiu(self.atores[i]));
+                    self.verde.tomadaDeDirecao(self.verde.colidiu(self.atores[i]));
+                    self.rosa.tomadaDeDirecao(self.rosa.colidiu(self.atores[i]));
+                    self.roxo.tomadaDeDirecao(self.roxo.colidiu(self.atores[i]));
+                    //this.azul.direcao = 38
+                    //console.log('colidiu');
+                }
+            
 
-          if (self.pacman.morreu==false){
-              self.somGame.play();
-          }
-			     
-          self.atores[i].updatePosicaoXY();
-          self.atores[i].paint();
-       }
+            if (self.pacman.morreu==false){
+                self.somGame.play();
+            }
+                    
+            self.atores[i].updatePosicaoXY();
+            self.atores[i].paint();
+        }
 
-	}
+        }
+    }
 }
 
 

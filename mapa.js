@@ -29,6 +29,7 @@ class Mapa {
             self.atores.push(bloco);
         }                
 
+
         //baixo
         for (var i = 0; i < 44; i++) {
             bloco = new Bloco('bloco',ctx);

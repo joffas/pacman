@@ -196,7 +196,7 @@ class Ator {
 	}				
 		
 	paint(){
-		//this.canvas.beginPath();		
+		//this.canvas.beginPath();			
 	}
 		
 	get paraDireita(){ 
