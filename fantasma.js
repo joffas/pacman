@@ -7,9 +7,9 @@ class Fantasma extends Ator {
 		this.left = 50;
 		this.top = 50;
 		this.imagem = 254;
-		this.imagemOld = 0;
-	}	
-	
+		this.imagemOld = 0;		
+	}
+
 	paint(){
 		super.paint;		
 		

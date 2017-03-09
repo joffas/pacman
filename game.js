@@ -11,6 +11,7 @@ class Game {
         this.Mapa = null;
         this.somInicio = new Audio('pacman_beginning.wav');
         this.somGame = new Audio('pacman_chomp.wav');
+        this.somFantasmaDead = new Audio('pacman_eatghost.wav');        
         //Atores
         //this.pacman = null;
         this.inicio = false;
@@ -134,7 +135,9 @@ class Game {
             } 
             if (self.atores[i] instanceof Fantasma){
                 if (self.atores[i].fraco){
-                    (self.atores[i].dead(self.pacman))
+                    if (self.atores[i].dead(self.pacman)){
+                        self.somFantasmaDead.play();
+                    }                    
                 }
             }                                 
             if (self.atores[i] instanceof Fantasma){

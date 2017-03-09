@@ -1,4 +1,4 @@
-Algoritimos para detectar imagens...
+﻿Algoritimos para detectar imagens...
 
 http://www.inf.pucrs.br/~pinho/CG/Aulas/Img/IMG.htm
 http://www.inf.ufsc.br/~aldo.vw/patrec/imagens.html
@@ -27,3 +27,6 @@ https://codepen.io
 
 Pacman desenhado
 https://developer.mozilla.org/pt-BR/docs/Web/Guide/HTML/Canvas_tutorial/Drawing_shapes
+
+games
+http://graysonearle.com/edu/gamepro/week07-pororo-game-with-sound/
