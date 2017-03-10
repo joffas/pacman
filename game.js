@@ -10,8 +10,11 @@ class Game {
         this.vermelho = null;
         this.Mapa = null;
         this.somInicio = new Audio('pacman_beginning.wav');
-        this.somGame = new Audio('pacman_chomp.wav');
+        //this.somGame = new Audio('pacman_chomp.wav');
+        //this.somGame = new Audio('siren.wav');
+        
         this.somFantasmaDead = new Audio('pacman_eatghost.wav');        
+        this.somDot = new Audio('dot.wav');        
         //Atores
         //this.pacman = null;
         this.inicio = false;
@@ -131,15 +134,20 @@ class Game {
                 }
             }                        
             if (self.atores[i] instanceof Ponto){
-                self.atores[i].dead(self.pacman);
+                if (!self.atores[i].morreu){
+                    if (self.atores[i].dead(self.pacman)){
+                        self.somDot.play();
+                    }
+                }
             } 
             if (self.atores[i] instanceof Fantasma){
                 if (self.atores[i].fraco){
                     if (self.atores[i].dead(self.pacman)){
                         self.somFantasmaDead.play();
-                    }                    
+                    }
                 }
-            }                                 
+            }
+
             if (self.atores[i] instanceof Fantasma){
                 (self.pacman.dead(self.atores[i]))
             }           
@@ -157,7 +165,7 @@ class Game {
             
 
             if (self.pacman.morreu==false){
-                self.somGame.play();
+             //   self.somGame.play();
             }
                     
             self.atores[i].updatePosicaoXY();
