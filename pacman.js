@@ -4,7 +4,7 @@ class Pacman extends Ator {
     constructor(tipoAtor, ctx) {
 		super(tipoAtor, ctx);
 		this.tempoBoca = 0;
-		this.left = 150;
+		this.left = 132;
 		this.top = 250;
 		this.somMorreu = new Audio('pacman_death.wav');
 		this.morreu = false;
