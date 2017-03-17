@@ -19,13 +19,11 @@ class Bloco extends Ator {
 		var bloco_quadrado3 = [228,36,24,24];
 		var bloco_vitamina1 = [228,70,24,24];
 		var bloco_vitamina2 = [260,70,24,24];
+		var bloco_quadrado = [15,15,60,60];
 
 		var blocoCantoSuperiorEsquerdo = [250,0,50,32];		
 
-		var posSprite = bloco_quadrado1;
-/*	this.width = posSprite[2];
-		this.height = posSprite[3];
-		*/
+		var posSprite = bloco_quadrado;
 
 		this.canvas.drawImage(this.sprite,
 			//corte do sprite

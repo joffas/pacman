@@ -32,8 +32,10 @@ class Mapa {
         //Meio baixo
         bloco = new Bloco('bloco',ctx);
         bloco.height = 122;
+        bloco.width = 24;
         bloco.top = 0;
         bloco.left = iLeft;
+        var iMeio = iLeft;
         self.atores.push(bloco);
         iLeft = bloco.left + bloco.width + iSpaco;
 
@@ -132,6 +134,55 @@ class Mapa {
         iLeft = bloco.left + bloco.width + iSpaco;
         
         bloco = new Bloco('bloco',ctx);        
+        //bloco.left = iLeft;
+        bloco.left = iMeio;
+        bloco.top = iTop - 56;
+        bloco.height = 80;
+        bloco.width = 24;
+        self.atores.push(bloco);
+        iLeft = bloco.left + bloco.width + iSpaco;
+
+        bloco = new Bloco('bloco',ctx);        
+        bloco.left = iLeft+iMargem;
+        bloco.top = iTop;
+        bloco.height = 24;
+        bloco.width = 96;
+        self.atores.push(bloco);
+        iLeft = bloco.left + bloco.width + iSpaco;
+
+        
+        bloco = new Bloco('bloco',ctx);        
+        bloco.left = iLeft+24;        
+        bloco.top = iTop;
+        bloco.height = 24;
+        bloco.width = 118;
+        self.atores.push(bloco);
+        iLeft = bloco.left + bloco.width + iSpaco;
+
+        //Linha Esquerda
+        bloco = new Bloco('bloco',ctx);
+        bloco.top = 0;
+        bloco.height = 264;
+        self.atores.push(bloco);
+       
+
+        //******************************************************* */
+        //4 - Quarta faixa de blocos de cima para baixo        
+        var iTop = bloco.top + bloco.height + iSpaco;
+        var iLeft = 0;
+
+
+        iLeft = iMargem;
+        bloco = new Bloco('bloco',ctx);        
+        bloco.left = iLeft;
+        bloco.top = iTop;
+        bloco.height = 24;
+        bloco.width = 118;
+        self.atores.push(bloco);
+        iLeft = bloco.left + bloco.width - 24;
+
+       
+        bloco = new Bloco('bloco',ctx);        
         bloco.left = iLeft;
         bloco.top = iTop - 56;
         bloco.height = 80;
@@ -149,28 +200,24 @@ class Mapa {
 
         
         bloco = new Bloco('bloco',ctx);        
-        bloco.left = iLeft+24;
+        bloco.left = iLeft+24;        
         bloco.top = iTop;
         bloco.height = 24;
         bloco.width = 118;
         self.atores.push(bloco);
         iLeft = bloco.left + bloco.width + iSpaco;
 
+        
+
 
         //cima   
-        for (var i = 0; i < 44; i++) {
+        for (var i = 0; i < 40; i++) {
             bloco = new Bloco('bloco',ctx);        
             bloco.left = i*bloco.width;
             self.atores.push(bloco);
         }
 
-        //Esquerda
-        for (var i = 0; i < 30; i++) {
-            bloco = new Bloco('bloco',ctx);
-            bloco.top = (i*bloco.height)+bloco.height;
-            self.atores.push(bloco);
-        } 
-
+        
 
 
         //baixo
