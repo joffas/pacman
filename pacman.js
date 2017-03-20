@@ -10,7 +10,7 @@ class Pacman extends Ator {
 		this.morreu = false;
 		this.tempoBoca = 0;
 		this.controlaBoca = 0;
-		this.velocidade = 2;
+		this.velocidade = 1.2;
     }
 	
 	get controlaBoca(){

@@ -3,7 +3,7 @@ class Mapa {
 	constructor(ctx, self) {
         this.tamanho = 18;
         this.width = this.tamanho*32;
-        this.height = this.tamanho*25;
+        this.height = this.tamanho*32;
         this.corredor = this.tamanho*2;
         this.larguraLinhas = 9;
 		var bloco = null;
@@ -15,7 +15,7 @@ class Mapa {
         var iMargem = this.larguraLinhas;
 
         self.pacman.left = this.tamanho*15;
-        self.pacman.top = this.tamanho*18;
+        self.pacman.top = this.tamanho*18-this.larguraLinhas+2;
 
         self.azul.left = this.tamanho*15;
         self.azul.top = this.tamanho*14;
@@ -48,7 +48,14 @@ class Mapa {
         //Linha Esquerda1
         bloco = new Bloco('bloco',ctx);
         bloco.top = 0;
-        bloco.height = this.tamanho*11;
+        bloco.height = this.tamanho*11+this.larguraLinhas;
+        bloco.width = this.larguraLinhas;
+        self.atores.push(bloco);
+
+        //Linha Esquerda2
+        bloco = new Bloco('bloco',ctx);
+        bloco.top = this.tamanho*20;
+        bloco.height = this.tamanho*11+this.larguraLinhas;
         bloco.width = this.larguraLinhas;
         self.atores.push(bloco);
 
@@ -56,7 +63,15 @@ class Mapa {
         bloco = new Bloco('bloco',ctx);
         bloco.top = 0;
         bloco.left = this.width-this.larguraLinhas;
-        bloco.height = this.tamanho*11;
+        bloco.height = this.tamanho*11+this.larguraLinhas;
+        bloco.width = this.larguraLinhas;
+        self.atores.push(bloco);
+
+        //Linha Direita2
+        bloco = new Bloco('bloco',ctx);
+        bloco.top = this.tamanho*20;
+        bloco.left = this.width-this.larguraLinhas;
+        bloco.height = this.tamanho*11+this.larguraLinhas;
         bloco.width = this.larguraLinhas;
         self.atores.push(bloco);
 
@@ -342,51 +357,237 @@ class Mapa {
         bloco.pintar = false;
         self.atores.push(bloco); 
 
+        //******************************************************* */
+        //6 - Quarta faixa de blocos de cima para baixo        
+        var iTop = bloco.top + bloco.height + iSpaco;
+        var iLeft = 0;
 
+        bloco = new Bloco('bloco',ctx);        
+        bloco.left = 0;
+        bloco.top = iTop;
+        bloco.height = this.tamanho;
+        bloco.width = this.tamanho*5+this.larguraLinhas;
+        self.atores.push(bloco);
+
+        b2 = bloco;
+        bloco = new Bloco('bloco',ctx);        
+        bloco.left = this.larguraLinhas+this.tamanho*4;
+        bloco.top = iTop;
+        bloco.height = this.tamanho;
+        bloco.width = this.tamanho;
+        self.atores.push(bloco); 
+//aqui
+        b2 = bloco;
+        bloco = new Bloco('bloco',ctx);        
+        bloco.left = b2.left+b2.width+this.corredor;
+        bloco.top = iTop;
+        bloco.height = this.tamanho;
+        bloco.width = this.tamanho;
+        self.atores.push(bloco); 
+
+        b2 = bloco;
+        bloco = new Bloco('bloco',ctx);        
+        bloco.left = b2.left+b2.width+this.corredor;
+        bloco.top = iTop;
+        bloco.height = this.tamanho;
+        bloco.width = this.tamanho*11;
+        self.atores.push(bloco); 
+
+        b2 = bloco;
+        bloco = new Bloco('bloco',ctx);        
+        bloco.left = this.larguraLinhas+this.tamanho*15;
+        bloco.top = iTop;
+        bloco.height = this.tamanho*4;
+        bloco.width = this.tamanho;
+        self.atores.push(bloco);         
+
+        b2 = bloco;
+        bloco = new Bloco('bloco',ctx);        
+        bloco.left = this.tamanho*27;
+        bloco.top = iTop;
+        bloco.height = this.tamanho;
+        bloco.width = this.tamanho*5;
+        self.atores.push(bloco);       
+
+        b2 = bloco;
+        bloco = new Bloco('bloco',ctx);        
+        bloco.left = this.tamanho*23+this.larguraLinhas;
+        bloco.top = iTop;
+        bloco.height = this.tamanho;
+        bloco.width = this.tamanho;
+        self.atores.push(bloco);       
+
+        b2 = bloco;
+        bloco = new Bloco('bloco',ctx);        
+        bloco.left = this.tamanho*26+this.larguraLinhas;
+        bloco.top = iTop;
+        bloco.height = this.tamanho;
+        bloco.width = this.tamanho;
+        self.atores.push(bloco);       
+        //******************************************************* */
+        
+        //******************************************************* */
+        //7 - Quarta faixa de blocos de cima para baixo        
+        var iTop = bloco.top + bloco.height + iSpaco;
+        var iLeft = 0;
+
+        bloco = new Bloco('bloco',ctx);  
+        bloco.left = this.larguraLinhas+this.corredor;
+        bloco.top = iTop;
+        bloco.height = this.tamanho;
+        bloco.width = this.tamanho*2;
+        self.atores.push(bloco);
+
+        b2 = bloco;
+        bloco = new Bloco('bloco',ctx);
+        bloco.left = this.larguraLinhas+this.tamanho*4;
+        bloco.top = iTop;
+        bloco.height = this.tamanho*4;
+        bloco.width = this.tamanho;
+        self.atores.push(bloco);
+
+        b2 = bloco;
+        bloco = new Bloco('bloco',ctx);        
+        bloco.left = b2.left+b2.width+this.corredor;
+        bloco.top = iTop;
+        bloco.height = this.tamanho;
+        bloco.width = this.tamanho*6;
+        self.atores.push(bloco); 
+
+        b2 = bloco;
+        bloco = new Bloco('bloco',ctx);        
+        bloco.left = this.tamanho*18+this.larguraLinhas;
+        bloco.top = iTop;
+        bloco.height = this.tamanho;
+        bloco.width = this.tamanho*6;
+        self.atores.push(bloco); 
+
+        bloco = new Bloco('bloco',ctx);  
+        bloco.left = this.tamanho*26+this.larguraLinhas;
+        bloco.top = iTop;
+        bloco.height = this.tamanho*4;
+        bloco.width = this.tamanho;
+        self.atores.push(bloco);
+
+        bloco = new Bloco('bloco',ctx);  
+        bloco.left = this.tamanho*26+this.larguraLinhas;
+        bloco.top = iTop;
+        bloco.height = this.tamanho;
+        bloco.width = this.tamanho*3;
+        self.atores.push(bloco);
+        
         //******************************************************* */
 
+        //******************************************************* */
+        //8 - Quarta faixa de blocos de cima para baixo        
+        var iTop = bloco.top + bloco.height + iSpaco;
+        var iLeft = 0;
 
-        for (var i = 1; i < 19; i++) {
-            ponto = new Ponto('ponto',ctx);        
-            ponto.top = (i*ponto.width*2)+iMargem*4;
-            ponto.left = this.tamanho*6;
-            self.atores.push(ponto);
+        bloco = new Bloco('bloco',ctx);  
+        bloco.left = this.larguraLinhas;
+        bloco.top = iTop;
+        bloco.height = this.tamanho;
+        bloco.width = this.tamanho*2;
+        self.atores.push(bloco);
 
+        b2 = bloco;
+        bloco = new Bloco('bloco',ctx);
+        bloco.left = this.larguraLinhas+this.tamanho*7;
+        bloco.top = iTop;
+        bloco.height = this.tamanho*3;
+        bloco.width = this.tamanho;
+        self.atores.push(bloco);
+
+        b2 = bloco;
+        bloco = new Bloco('bloco',ctx);        
+        bloco.left = b2.left+b2.width+this.corredor;
+        bloco.top = iTop;
+        bloco.height = this.tamanho;
+        bloco.width = this.tamanho*6;
+        self.atores.push(bloco); 
+
+        b2 = bloco;
+        bloco = new Bloco('bloco',ctx);        
+        bloco.left = this.tamanho*15+this.larguraLinhas;
+        bloco.top = iTop;
+        bloco.height = this.tamanho*4;
+        bloco.width = this.tamanho;
+        self.atores.push(bloco); 
+
+        b2 = bloco;
+        bloco = new Bloco('bloco',ctx);        
+        bloco.left = this.tamanho*15+this.larguraLinhas;
+        bloco.top = iTop;
+        bloco.height = this.tamanho;
+        bloco.width = this.tamanho*6;
+        self.atores.push(bloco); 
+
+        b2 = bloco;
+        bloco = new Bloco('bloco',ctx);        
+        bloco.left = this.tamanho*23+this.larguraLinhas;
+        bloco.top = iTop;
+        bloco.height = this.tamanho*3;
+        bloco.width = this.tamanho;
+        self.atores.push(bloco); 
+
+        b2 = bloco;
+        bloco = new Bloco('bloco',ctx);        
+        bloco.left = this.tamanho*29+this.larguraLinhas;
+        bloco.top = iTop;
+        bloco.height = this.tamanho;
+        bloco.width = this.tamanho*2;
+        self.atores.push(bloco); 
+                
+        //******************************************************* */
+
+        //******************************************************* */
+        //9 - Quarta faixa de blocos de cima para baixo        
+        var iTop = bloco.top + bloco.height + iSpaco;
+        var iLeft = 0;
+
+        bloco = new Bloco('bloco',ctx);  
+        bloco.left = this.larguraLinhas+this.tamanho*2;
+        bloco.top = iTop;
+        bloco.height = this.tamanho;
+        bloco.width = this.tamanho*11;
+        self.atores.push(bloco);
+
+        bloco = new Bloco('bloco',ctx);  
+        bloco.left = this.larguraLinhas+this.tamanho*18;
+        bloco.top = iTop;
+        bloco.height = this.tamanho;
+        bloco.width = this.tamanho*11;
+        self.atores.push(bloco);
+                
+        //******************************************************* */
+
+        //pontos esquerda para direita
+        for (var i = 1; i < 18; i++) {
+            if (i<=8 || i>=10){
+                ponto = new Ponto('ponto',ctx);        
+                if (i<=8)
+                    ponto.left = (i*ponto.width*2)+this.tamanho;
+                else
+                    ponto.left = (i*ponto.width*2)+this.tamanho+this.larguraLinhas;
+                ponto.top = this.tamanho;
+                self.atores.push(ponto);                
+            }            
             ponto = new Ponto('ponto',ctx);        
-            ponto.top = (i*ponto.width*2)+iMargem*4;
-            ponto.left = this.tamanho*25;
+            if (i<=8)
+                ponto.left = (i*ponto.width*2)+this.tamanho;
+            else
+                ponto.left = (i*ponto.width*2)+this.tamanho+this.larguraLinhas;
+            ponto.top = this.tamanho*6;
             self.atores.push(ponto);            
 
-            if (i<=5 || i>=11){
-                ponto = new Ponto('ponto',ctx);        
-                ponto.top = (i*ponto.width*2)+this.tamanho;
-                ponto.left = iMargem*2;
-                self.atores.push(ponto);
-            }
-
-            if (i<=6 || i>=11){
-                ponto = new Ponto('ponto',ctx);        
-                ponto.top = (i*ponto.width*2)+32;
-                ponto.left = 680;
-                self.atores.push(ponto);
-            }
-        }
-
-        for (var i = 1; i < 19; i++) {
-            if (i<=8 || i>=11){
-                ponto = new Ponto('ponto',ctx);        
+            //ultima
+            ponto = new Ponto('ponto',ctx);        
+            if (i<=8)
                 ponto.left = (i*ponto.width*2)+this.tamanho;
-                ponto.top = this.tamanho;
-                self.atores.push(ponto);
-            }
-
-            if (i<=3 || i>=5){
-                ponto = new Ponto('ponto',ctx);        
-                ponto.left = (i*ponto.width*2)+this.tamanho;
-                ponto.top = this.tamanho*6;
-                self.atores.push(ponto);
-            }
-            
+            else
+                ponto.left = (i*ponto.width*2)+this.tamanho+this.larguraLinhas;
+            ponto.top = this.tamanho*30;
+            self.atores.push(ponto);            
         }
 
 
@@ -398,6 +599,16 @@ class Mapa {
         vitamina = new Vitamina('Vitamina',ctx);        
         vitamina.left = this.tamanho*30;
         vitamina.top = this.tamanho;
+        self.atores.push(vitamina);
+
+        vitamina = new Vitamina('Vitamina',ctx);        
+        vitamina.left = this.tamanho;
+        vitamina.top = this.tamanho*30;
+        self.atores.push(vitamina);
+        
+        vitamina = new Vitamina('Vitamina',ctx);        
+        vitamina.left = this.tamanho*30;
+        vitamina.top = this.tamanho*30;
         self.atores.push(vitamina);
 
 
