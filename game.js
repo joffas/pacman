@@ -11,10 +11,12 @@ class Game {
         this.Mapa = null;
         this.somInicio = new Audio('pacman_beginning.wav');
         //this.somGame = new Audio('pacman_chomp.wav');
-        //this.somGame = new Audio('siren.wav');
+        this.somGame = new Audio('siren.wav');
         
         this.somFantasmaDead = new Audio('pacman_eatghost.wav');        
-        this.somDot = new Audio('dot.wav');        
+        this.somDot1 = new Audio('dot.wav');
+        this.somDot2 = new Audio('dot1.wav');
+        this.somDot3 = new Audio('dot2.wav');        
         //Atores
         //this.pacman = null;
         this.inicio = false;
@@ -102,6 +104,7 @@ class Game {
             this.atores.push(this.rosa);
             this.atores.push(this.roxo);
             this.mapa = new Mapa(this.ctx, this);
+            this.pcs = 0;
             return setInterval(this.draw, 10, this/*Deve ser passado por parametro para usar no draw*/);
         }
     }
@@ -136,7 +139,29 @@ class Game {
             if (self.atores[i] instanceof Ponto){
                 if (!self.atores[i].morreu){
                     if (self.atores[i].dead(self.pacman)){
-                        self.somDot.play();
+        //                self.somDot.play();
+                        if (self.pcs==0)
+                            if ((self.somDot1.currentTime==self.somDot1.duration)||
+                                (self.somDot1.currentTime==0)){
+                                self.somDot1.volume = 0.8;
+                                self.pcs = 1;
+                                self.somDot1.play();
+                            }
+                        if (self.pcs==1)
+                            if ((self.somDot1.currentTime==self.somDot1.duration)||
+                                (self.somDot1.currentTime==0)){
+                                self.somDot1.volume = 0.8;
+                                self.pcs = 2;
+                                self.somDot1.play();
+                            }
+                        if (self.pcs==2)
+                            if ((self.somDot1.currentTime==self.somDot1.duration)||
+                                (self.somDot1.currentTime==0)){
+                                self.somDot1.volume = 0.8;
+                                self.pcs = 0;
+                                self.somDot1.play();
+                            }
+                                
                     }
                 }
             } 
@@ -165,7 +190,11 @@ class Game {
             
 
             if (self.pacman.morreu==false){
-             //   self.somGame.play();
+                if ((self.somGame.currentTime==self.somGame.duration)||
+                    (self.somGame.currentTime==0)){
+                    self.somGame.volume = 0.5;
+                    self.somGame.play();
+                }
             }
                     
             self.atores[i].updatePosicaoXY();

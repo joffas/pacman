@@ -7,6 +7,7 @@ class Bloco extends Ator {
 		this.spriteName = 'cenario.png';		
 		this.height = 18;
 		this.width = 18;
+		this.pintar = true;
 	}	
 
 	paint(){
@@ -25,7 +26,8 @@ class Bloco extends Ator {
 
 		var posSprite = bloco_quadrado;
 
-		this.canvas.drawImage(this.sprite,
+		if (this.pintar)
+			this.canvas.drawImage(this.sprite,
 			//corte do sprite
 			posSprite[0],posSprite[1],posSprite[2],posSprite[3],			
 			//onde ele esta agora
