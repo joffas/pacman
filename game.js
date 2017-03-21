@@ -3,8 +3,8 @@ class Game {
     constructor(name){
         this.name = name;
         this.atores = null;
-        this.width  = 600;
-        this.height = 800;
+        this.width  = 580;
+        this.height = 600;
         this.pacman = null;
         this.azul = null;
         this.vermelho = null;
@@ -98,12 +98,14 @@ class Game {
             //Adicionando ao array controlador
             this.atores = new Array();
             this.atores.push(this.pacman);
+            this.mapa = new Mapa(this.ctx, this);
 			this.atores.push(this.azul);
             this.atores.push(this.vermelho);
             this.atores.push(this.verde);
             this.atores.push(this.rosa);
             this.atores.push(this.roxo);
-            this.mapa = new Mapa(this.ctx, this);
+
+
             this.pcs = 0;
             return setInterval(this.draw, 10, this/*Deve ser passado por parametro para usar no draw*/);
         }

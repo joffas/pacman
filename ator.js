@@ -137,8 +137,18 @@ class Ator {
 	}	
 		
 	updatePosicaoXY(){
-		if (this.direcao==_DIREITA) { this.left += this.velocidade }//Direita
-		if (this.direcao==_ESQUERDA) { this.left -= this.velocidade }//Esquerda
+		if (this.direcao==_DIREITA) { 
+			this.left += this.velocidade;
+			if (this.left>600){
+				this.left=0;
+			} 
+		}//Direita
+		if (this.direcao==_ESQUERDA) { 
+			this.left -= this.velocidade;
+			if (this.left<-32){
+				this.left=600;
+			} 
+		}//Esquerda
 		if (this.direcao==_CIMA) { this.top -= this.velocidade }//Cima
 		if (this.direcao==_BAIXO) { this.top += this.velocidade }//Baixo
 	}

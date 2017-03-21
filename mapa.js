@@ -1,11 +1,11 @@
 class Mapa {
 	
 	constructor(ctx, self) {
-        this.tamanho = 18;
+        this.larguraLinhas = 9;
+        this.tamanho = this.larguraLinhas*2;
         this.width = this.tamanho*32;
         this.height = this.tamanho*32;
         this.corredor = this.tamanho*2;
-        this.larguraLinhas = 9;
 		var bloco = null;
         var ponto = null;
         var vitamina = null;
@@ -15,7 +15,7 @@ class Mapa {
         var iMargem = this.larguraLinhas;
 
         self.pacman.left = this.tamanho*15;
-        self.pacman.top = this.tamanho*18-this.larguraLinhas+2;
+        self.pacman.top = this.tamanho*24-this.larguraLinhas+2;
 
         self.azul.left = this.tamanho*15;
         self.azul.top = this.tamanho*14;
@@ -562,32 +562,141 @@ class Mapa {
         //******************************************************* */
 
         //pontos esquerda para direita
-        for (var i = 1; i < 18; i++) {
-            if (i<=8 || i>=10){
+        for (var i = 0; i < 20; i++) {
+            if (i>0 && i<=8){
                 ponto = new Ponto('ponto',ctx);        
-                if (i<=8)
-                    ponto.left = (i*ponto.width*2)+this.tamanho;
-                else
-                    ponto.left = (i*ponto.width*2)+this.tamanho+this.larguraLinhas;
+                ponto.left = (i*ponto.width*2)+this.tamanho+this.larguraLinhas;
                 ponto.top = this.tamanho;
                 self.atores.push(ponto);                
-            }            
-            ponto = new Ponto('ponto',ctx);        
-            if (i<=8)
-                ponto.left = (i*ponto.width*2)+this.tamanho;
-            else
+            }
+            if (i>=10 && i<=17){
+                ponto = new Ponto('ponto',ctx);        
                 ponto.left = (i*ponto.width*2)+this.tamanho+this.larguraLinhas;
-            ponto.top = this.tamanho*6;
-            self.atores.push(ponto);            
+                ponto.top = this.tamanho;
+                self.atores.push(ponto);                
+            } 
+             
+            //segunda linha 
+            if (i>=0 && i<=18){          
+                ponto = new Ponto('ponto',ctx);        
+                ponto.left = (i*ponto.width*2)+this.tamanho+this.larguraLinhas;
+                ponto.top = this.tamanho*6;
+                self.atores.push(ponto);
+            }
+
+            //terceira
+            if (i>=0 && i<=3) {
+                ponto = new Ponto('ponto',ctx);        
+                ponto.left = (i*ponto.width*2)+this.tamanho+this.larguraLinhas;
+                ponto.top = this.tamanho*9;
+                self.atores.push(ponto);                                    
+            }            
+            
+            if (i>=5 && i<=8) {
+                ponto = new Ponto('ponto',ctx);        
+                ponto.left = (i*ponto.width*2)+this.tamanho+this.larguraLinhas;
+                ponto.top = this.tamanho*9;
+                self.atores.push(ponto);                                    
+            }            
+            if (i>=11 && i<=14) {
+                ponto = new Ponto('ponto',ctx);        
+                ponto.left = (i*ponto.width*2);
+                ponto.top = this.tamanho*9;
+                self.atores.push(ponto);                                    
+            }            
+
+            if (i>=16 && i<=20) {
+                ponto = new Ponto('ponto',ctx);        
+                ponto.left = (i*ponto.width*2);
+                ponto.top = this.tamanho*9;
+                self.atores.push(ponto);                                    
+            }            
+
+            //quarta
+            if (i>=5 && i<=13) {
+                ponto = new Ponto('ponto',ctx);        
+                ponto.left = (i*ponto.width*2)+this.tamanho+this.larguraLinhas;
+                ponto.top = this.tamanho*12;
+                self.atores.push(ponto);                                    
+            }            
+
+            //quinta
+            if (i>=0 && i<=8) {
+                ponto = new Ponto('ponto',ctx);        
+                ponto.left = (i*ponto.width*2)+this.tamanho+this.larguraLinhas;
+                ponto.top = this.tamanho*21;
+                self.atores.push(ponto);                                    
+            }            
+            if (i>=11 && i<=28) {
+                ponto = new Ponto('ponto',ctx);        
+                ponto.left = (i*ponto.width*2);
+                ponto.top = this.tamanho*21;
+                self.atores.push(ponto);                                    
+            }            
+
+            //anti-penultima
+            if (i>=0 && i<=1) {
+                ponto = new Ponto('ponto',ctx);        
+                ponto.left = (i*ponto.width*2)+this.tamanho+this.larguraLinhas;
+                ponto.top = this.tamanho*24;
+                self.atores.push(ponto);                                    
+            }            
+            
+            if (i>=3 && i<=7) {
+                ponto = new Ponto('ponto',ctx);        
+                ponto.left = (i*ponto.width*2)+this.tamanho+this.larguraLinhas;
+                ponto.top = this.tamanho*24;
+                self.atores.push(ponto);                                    
+            }            
+            if (i>=12 && i<=16) {
+                ponto = new Ponto('ponto',ctx);        
+                ponto.left = (i*ponto.width*2);
+                ponto.top = this.tamanho*24;
+                self.atores.push(ponto);                                    
+            }            
+
+            if (i>=18 && i<=20) {
+                ponto = new Ponto('ponto',ctx);        
+                ponto.left = (i*ponto.width*2);
+                ponto.top = this.tamanho*24;
+                self.atores.push(ponto);                                    
+            }            
+
+            //penultima
+            if (i>=0 && i<=3) {
+                ponto = new Ponto('ponto',ctx);        
+                ponto.left = (i*ponto.width*2)+this.tamanho+this.larguraLinhas;
+                ponto.top = this.tamanho*27;
+                self.atores.push(ponto);                                    
+            }            
+            
+            if (i>=5 && i<=8) {
+                ponto = new Ponto('ponto',ctx);        
+                ponto.left = (i*ponto.width*2)+this.tamanho+this.larguraLinhas;
+                ponto.top = this.tamanho*27;
+                self.atores.push(ponto);                                    
+            }            
+            if (i>=11 && i<=14) {
+                ponto = new Ponto('ponto',ctx);        
+                ponto.left = (i*ponto.width*2);
+                ponto.top = this.tamanho*27;
+                self.atores.push(ponto);                                    
+            }            
+
+            if (i>=16 && i<=20) {
+                ponto = new Ponto('ponto',ctx);        
+                ponto.left = (i*ponto.width*2);
+                ponto.top = this.tamanho*27;
+                self.atores.push(ponto);                                    
+            }            
 
             //ultima
-            ponto = new Ponto('ponto',ctx);        
-            if (i<=8)
-                ponto.left = (i*ponto.width*2)+this.tamanho;
-            else
+            if (i>=1 && i<=17) {            
+                ponto = new Ponto('ponto',ctx);        
                 ponto.left = (i*ponto.width*2)+this.tamanho+this.larguraLinhas;
-            ponto.top = this.tamanho*30;
-            self.atores.push(ponto);            
+                ponto.top = this.tamanho*30;
+                self.atores.push(ponto);
+            }            
         }
 
 
