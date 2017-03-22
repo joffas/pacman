@@ -19,6 +19,7 @@ class Ator {
 		this.direcaoAnterior = 0;				
 		this.morreu = false;
 		this.fraco = false;
+		this.vitaminado = 0;
 	}
 	
 	dead(outro){

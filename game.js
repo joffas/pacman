@@ -12,7 +12,7 @@ class Game {
         this.somInicio = new Audio('pacman_beginning.wav');
         //this.somGame = new Audio('pacman_chomp.wav');
         this.somGame = new Audio('siren.wav');
-        
+        this.passouFase = false;
         this.somFantasmaDead = new Audio('pacman_eatghost.wav');        
         this.somDot1 = new Audio('dot.wav');
         this.somDot2 = new Audio('dot1.wav');
@@ -132,12 +132,38 @@ class Game {
         for (var i in self.atores){
             if (self.atores[i] instanceof Vitamina){
                 if (self.atores[i].dead(self.pacman)){
+                    self.pacman.vitaminado = 150000;
                     for (var x in self.atores){
                         if (self.atores[x] instanceof Fantasma)
                             self.atores[x].fraco = true;
                     }
                 }
             }                        
+            if (self.pacman.vitaminado>0){
+                self.pacman.vitaminado = self.pacman.vitaminado - 1;
+            } else {
+                for (var x in self.atores){
+                    if (self.atores[x] instanceof Fantasma)
+                        self.atores[x].fraco = false;
+                }                
+            }
+            var pontosVivos = 0;
+            if (self.passouFase==false){                
+                for (var x in self.atores){
+                    if (self.atores[x] instanceof Ponto){
+                        if (!self.atores[x].morreu){
+                            pontosVivos = pontosVivos + 1;
+                        }
+                    }
+                }
+                if  (pontosVivos==0){
+                    self.passouFase = true;
+                    alert('passou de faase uhhuuuu!!!');
+                }
+
+            }
+            
+
             if (self.atores[i] instanceof Ponto){
                 if (!self.atores[i].morreu){
                     if (self.atores[i].dead(self.pacman)){

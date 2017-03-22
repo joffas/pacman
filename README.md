@@ -8,8 +8,9 @@ Proximos Passos
     1 - Criar Map
       1.1 - Definir uma classe para o map (OK)
       1.2 - Criar Level
-      2.3 - Tunel do map
+      2.3 - Tunel do map (ok)
       2.4 - Ideia futura, fazer um map dinamico a partir de uma imagem
+      2.5 - definir margens
 
     2 - Morte
       2.1 - Alterar Imagens (Animação)
@@ -21,9 +22,14 @@ Proximos Passos
       3.3 - Classe para Vitamina - para comer fantasmas (OK)
       3.4 - Classe para frutas
 
-    4 - Locomoção
+    4 - Jogabilidade
       4.1 - Melhorar Locomoção pacman, detectando proxima entrada
       4.2 - Mover fantasmas (Algoritimo de Inteligencia). (OK)
+      4.3 - Fantama morrendo volta pra casa e renasce
+      4.4 - Tempo da vitamina (OK)
+      4.5 - Ao comer todos os pinos acaba a fase (ok)
+      4.6 - contabilizar pontos
+      4.7 - contabilizar vidas
 
     5 - Outras tarefas
       5.1 - Pause

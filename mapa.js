@@ -562,7 +562,8 @@ class Mapa {
         //******************************************************* */
 
         //pontos esquerda para direita
-        for (var i = 0; i < 20; i++) {
+        
+        for (var i = 0; i < 20; i++) {            
             if (i>0 && i<=8){
                 ponto = new Ponto('ponto',ctx);        
                 ponto.left = (i*ponto.width*2)+this.tamanho+this.larguraLinhas;
@@ -689,7 +690,6 @@ class Mapa {
                 ponto.top = this.tamanho*27;
                 self.atores.push(ponto);                                    
             }            
-
             //ultima
             if (i>=1 && i<=17) {            
                 ponto = new Ponto('ponto',ctx);        
