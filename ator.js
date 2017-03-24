@@ -20,6 +20,9 @@ class Ator {
 		this.morreu = false;
 		this.fraco = false;
 		this.vitaminado = 0;
+		this.__left=0;
+		this.__top=0;
+		
 	}
 	
 	dead(outro){
@@ -109,7 +112,7 @@ class Ator {
 	}		
 		
 	set direcao(tecla){		
-		this._direcao = 0;//parado
+//		this._direcao = 0;//parado
 		if (tecla == 39){ 
 			this._direcao = _DIREITA;//Direita
 		}
@@ -138,20 +141,33 @@ class Ator {
 	}	
 		
 	updatePosicaoXY(){
-		if (this.direcao==_DIREITA) { 
-			this.left += this.velocidade;
-			if (this.left>600){
-				this.left=0;
-			} 
-		}//Direita
-		if (this.direcao==_ESQUERDA) { 
-			this.left -= this.velocidade;
-			if (this.left<-32){
-				this.left=600;
-			} 
-		}//Esquerda
-		if (this.direcao==_CIMA) { this.top -= this.velocidade }//Cima
-		if (this.direcao==_BAIXO) { this.top += this.velocidade }//Baixo
+		if (this.morreu){
+			if (this.left>this.__left){
+				this.left = this.left-this.velocidade;
+			}else{
+				this.left = this.left+this.velocidade;
+			}
+			if (this.top>this.__top){
+				this.top = this.top-this.velocidade;
+			}else{
+				this.top = this.top+this.velocidade;
+			}			
+		}else{
+			if (this.direcao==_DIREITA) { 
+				this.left += this.velocidade;
+				if (this.left>600){
+					this.left=-32;
+				} 
+			}//Direita
+			if (this.direcao==_ESQUERDA) { 
+				this.left -= this.velocidade;
+				if (this.left<-32){
+					this.left=600;
+				} 
+			}//Esquerda
+			if (this.direcao==_CIMA) { this.top -= this.velocidade }//Cima
+			if (this.direcao==_BAIXO) { this.top += this.velocidade }//Baixo
+		}
 	}
 
 	get direcao(){

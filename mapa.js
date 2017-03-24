@@ -16,6 +16,9 @@ class Mapa {
 
         self.pacman.left = this.tamanho*15;
         self.pacman.top = this.tamanho*24-this.larguraLinhas+2;
+        self.pacman.__left = self.pacman.left;
+        self.pacman.__top = self.pacman.top;
+        
 
         self.azul.left = this.tamanho*15;
         self.azul.top = this.tamanho*14;
@@ -27,6 +30,17 @@ class Mapa {
         self.vermelho.top = this.tamanho*14;
         self.verde.left = this.tamanho*15;
         self.verde.top = this.tamanho*14;
+
+        self.azul.__left = self.azul.left;
+        self.azul.__top = self.azul.top;
+        self.rosa.__left = self.rosa.left;
+        self.rosa.__top = self.rosa.top;
+        self.roxo.__left = self.roxo.left;
+        self.roxo.__top = self.roxo.top;
+        self.vermelho.__left = self.vermelho.left;
+        self.vermelho.__top = self.vermelho.top;
+        self.verde.__left = self.verde.left;
+        self.verde.__top = self.verde.top;
         
 
         //linha de cima

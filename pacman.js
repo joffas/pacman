@@ -11,6 +11,9 @@ class Pacman extends Ator {
 		this.tempoBoca = 0;
 		this.controlaBoca = 0;
 		this.velocidade = 1.2;
+
+		this.tempoOlhos = 0;
+		this.imagem = 318;		
     }
 	
 	get controlaBoca(){
@@ -45,106 +48,53 @@ class Pacman extends Ator {
 	paint(){
 		super.paint;
 		
-		//console.log(this);
-		if (this.morreu){
-			this.canvas.drawImage(this.sprite,
-				//corte boca aberta - pacman
-				414,64,32,32,
-				//onde ele esta agora
-				this.left, this.top,
-				//tamanho do personagem
-				this.width,this.height
-			);				
-		}
-		else if (this.tempoBoca<=15) {
-			this.tempoBoca ++;	 
-								  
-			//Pinta a boca aberta
-			if ((this.paraDireita)||
-				(this.paraEsquerda)){
-				for (var i=0; i<=15; i++) {  
-					this.canvas.moveTo(this.left, this.top);
-					if (this.paraDireita){ 
-						this.controlaBoca = 0;
-						this.canvas.drawImage(this.sprite,
-							//corte boca aberta - pacman
-							350,0,32,32,			
-							//onde ele esta agora
-							this.left, this.top,
-							//tamanho do personagem
-							this.width,this.height
-							);
-					} 
-					else if (this.paraEsquerda){ 
-						this.controlaBoca = 64;						
-						this.canvas.drawImage(this.sprite,
-							//corte boca aberta - pacman
-							350,64,32,32,			
-							//onde ele esta agora
-							this.left, this.top,
-							//tamanho do personagem
-							this.width,this.height
-						);
 
-					} 			  
-				}
-			}else 
-				//Pinta a boca aberta
-				if ((this.paraBaixo)||(this.paraCima)) {
-					for (var i=0; i<=15; i++) {  
-						this.canvas.moveTo(this.left, this.top);
-						if (this.paraBaixo){ 
-							this.controlaBoca = 32;
-							this.canvas.drawImage(this.sprite,
-								//corte boca aberta - pacman
-								350,32,32,32,			
-								//onde ele esta agora
-								this.left, this.top,
-								//tamanho do personagem
-								this.width,this.height
-								);
-								  
-						} 
-						else if (this.paraCima) { 
-							this.controlaBoca = 96;
-							this.canvas.drawImage(this.sprite,
-								//corte boca aberta - pacman
-								350,96,32,32,			
-								//onde ele esta agora
-								this.left, this.top,
-								//tamanho do personagem
-								this.width,this.height
-								);
-								
-						} 			  
-					}
-				} else{				
-					this.canvas.drawImage(this.sprite,
-						//corte boca aberta - pacman
-						318,this.controlaBoca,32,32,			
-						//onde ele esta agora
-						this.left, this.top,
-						//tamanho do personagem
-						this.width,this.height
-						);
-
-				}  
+		if (this.tempoOlhos<=25) {
+			var left = this.imagem;
+			this.tempoOlhos ++;
 		} else {
-			this.tempoBoca ++;	 
-
-			this.canvas.drawImage(this.sprite,
-				//corte boca aberta - pacman
-				318,this.controlaBoca,32,32,			
-				//onde ele esta agora
-				this.left, this.top,
-				//tamanho do personagem
-				this.width,this.height
-			);
-
-			if (this.tempoBoca>=30) {
-				this.tempoBoca = 0;
+				this.tempoOlhos ++;
+				var left = this.imagem+32;	 
+				if (this.tempoOlhos>=60) {
+					this.tempoOlhos = 0;					
 			}
-			
+		}							
+		//Pinta a boca aberta
+		var top = 0;
+		switch (this.direcao) {
+		case _DIREITA://direita
+			top = 0; break;
+		case _ESQUERDA://esquerda
+			top = 64; break;
+		case _CIMA://cima
+			top = 96; break;
+		case _BAIXO://baixo
+			top = 32; break;					
+		default: break;
+		}
+		if (this.fraco){
+			top = 0;			 
+			left = 384;
+		}
+		if (this.morreu){
+			if (this.imagem<400)
+				this.imagem = this.imagem +1;
+			else
+				this.imagem = 0;
+			//this.tempoOlhos = 0;
+		}
+
+		for (var i=0; i<=25; i++){
+			this.canvas.moveTo(this.left, this.top);
+				this.canvas.drawImage(this.sprite,
+					//corte boca aberta - Azul
+					//Left, Top, Width, Height
+					left,top,32,32,			
+					//onde ele esta agora
+					this.left, this.top,
+					//tamanho do personagem
+					this.width,this.height
+				);						
 		}	
 	}
 }

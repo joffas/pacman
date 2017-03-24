@@ -61,36 +61,26 @@ class Game {
             this.pacman = new Pacman('pacman',this.ctx);
             //Fantasma
             this.vermelho = new Fantasma('fantasma',this.ctx);
-            this.vermelho.left = 500;
-            this.vermelho.top = 400;
             this.vermelho.velocidade = 0.7;            
 			this.vermelho.direcao = 37;
             this.vermelho.imagem = 0; 
 
             this.verde = new Fantasma('fantasma',this.ctx);
-            this.verde.left = 500;
-            this.verde.top = 400;
             this.verde.velocidade = 0.8;            
 			this.verde.direcao = 38;
             this.verde.imagem = 64;
 
             this.rosa = new Fantasma('fantasma',this.ctx);
-            this.rosa.left = 500;
-            this.rosa.top = 400;
             this.rosa.velocidade = 0.9;            
 			this.rosa.direcao = 39;
             this.rosa.imagem = 130;
 
             this.roxo = new Fantasma('fantasma',this.ctx);
-            this.roxo.left = 500;
-            this.roxo.top = 400;
             this.roxo.velocidade = 1.0;            
 			this.roxo.direcao = 40;
             this.roxo.imagem = 254;
 
             this.azul = new Fantasma('fantasma',this.ctx);
-            this.azul.left = 500;
-            this.azul.top = 400;
             this.azul.velocidade = 1.1;            
 			this.azul.direcao = 40;
             this.azul.imagem = 190;
@@ -195,8 +185,10 @@ class Game {
             } 
             if (self.atores[i] instanceof Fantasma){
                 if (self.atores[i].fraco){
-                    if (self.atores[i].dead(self.pacman)){
-                        self.somFantasmaDead.play();
+                    if  (self.atores[i].morreu==false){
+                        if (self.atores[i].dead(self.pacman)){
+                            self.somFantasmaDead.play();
+                        }
                     }
                 }
             }

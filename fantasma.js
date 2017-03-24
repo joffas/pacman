@@ -7,11 +7,11 @@ class Fantasma extends Ator {
 		this.left = 50;
 		this.top = 50;
 		this.imagem = 254;
-		this.imagemOld = 0;		
 	}
 
 	paint(){
-		super.paint;		
+		super.paint;	
+		
 		
 		if (this.tempoOlhos<=25) {
 			var left = this.imagem;
@@ -40,7 +40,11 @@ class Fantasma extends Ator {
 			top = 0;			 
 			left = 384;
 		}
-		if (!this.morreu)
+		if (this.morreu){
+			top = 64;
+			left = 384;
+		}
+		
 
 		for (var i=0; i<=25; i++){
 			this.canvas.moveTo(this.left, this.top);
