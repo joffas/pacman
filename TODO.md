@@ -55,11 +55,9 @@ Lista priorizada de tudo que falta ou precisa ser melhorado no projeto.
 - A fruta fica no mapa por ~10 segundos e some se não for comida
 - Exibir sprite correspondente ao nível atual
 
-### 8. Navegação mais fluida (buffer de direção)
-- Atualmente o Pacman trava se o jogador pressiona uma direção onde há parede
-- O original guarda a "próxima direção desejada" e só aplica quando o corredor estiver disponível
-- Implementar `direcaoDesejada` no Pacman: ao pressionar uma tecla, salva em buffer; a cada frame, tenta aplicar a direção do buffer antes da direção atual; se a nova direção for livre, muda; senão, continua na direção atual
-- Isso elimina a necessidade de acertar o pixel exato da entrada do corredor
+### ~~8. Navegação mais fluida (buffer de direção)~~ ✅
+- ~~Atualmente o Pacman trava se o jogador pressiona uma direção onde há parede~~
+- Corrigido: `set direcao` em `Pacman` agora guarda em `_direcaoDesejada` (buffer); `game.js` chama `tentarVirar()` a cada frame que testa a posição atual e com snap ao grid de 18px — vira quando o corredor estiver livre, sem precisar acertar o pixel exato
 
 ### 9. Inteligência dos fantasmas
 - Hoje os fantasmas mudam para uma direção **aleatória** ao colidir com parede — sem estratégia

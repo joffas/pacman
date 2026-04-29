@@ -47,6 +47,39 @@ class Game {
         this.ctx.clearRect(0, 0, this.width, this.height);
     }
 
+    tentarVirar(){
+        var d = this.pacman.direcaoDesejada;
+        if (!d || d === this.pacman.direcao) return;
+
+        var vel = this.pacman.velocidade;
+        var oldLeft = this.pacman.left;
+        var oldTop  = this.pacman.top;
+
+        var podeVirar = (snapLeft, snapTop) => {
+            this.pacman.left = snapLeft + (d == _DIREITA ? vel : d == _ESQUERDA ? -vel : 0);
+            this.pacman.top  = snapTop  + (d == _BAIXO  ? vel : d == _CIMA     ? -vel : 0);
+            var colisao = this.atores.some(a => a instanceof Bloco && this.pacman.detectarColisao(a));
+            this.pacman.left = oldLeft;
+            this.pacman.top  = oldTop;
+            return !colisao;
+        };
+
+        // Tenta virar na posição atual
+        if (podeVirar(oldLeft, oldTop)) {
+            this.pacman._direcao = d;
+            return;
+        }
+
+        // Tenta com snap ao grid de 18px (alinha ao corredor mais próximo)
+        var snapLeft = Math.round(oldLeft / 18) * 18;
+        var snapTop  = Math.round(oldTop  / 18) * 18;
+        if ((snapLeft !== oldLeft || snapTop !== oldTop) && podeVirar(snapLeft, snapTop)) {
+            this.pacman.left   = snapLeft;
+            this.pacman.top    = snapTop;
+            this.pacman._direcao = d;
+        }
+    }
+
     init(){
         this.canvas = document.getElementById("canvas");
         if (this.canvas.getContext) {
@@ -130,6 +163,7 @@ class Game {
 
 	   if (self.inicio){
            self.clear();
+           self.tentarVirar();
         for (var i in self.atores){
             if (self.atores[i] instanceof Vitamina){
                 if (self.atores[i].dead(self.pacman)){

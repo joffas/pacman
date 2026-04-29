@@ -11,11 +11,28 @@ class Pacman extends Ator {
 		this.tempoBoca = 0;
 		this.controlaBoca = 0;
 		this.velocidade = 1.2;
-
 		this.tempoOlhos = 0;
-		this.imagem = 318;		
+		this.imagem = 318;
+		this._direcaoDesejada = 0;
     }
-	
+
+	// Guarda a direção desejada em buffer sem aplicar imediatamente.
+	// game.js chama tentarVirar() a cada frame para aplicar quando o corredor estiver livre.
+	set direcao(tecla) {
+		if      (tecla == 39) this._direcaoDesejada = _DIREITA;
+		else if (tecla == 37) this._direcaoDesejada = _ESQUERDA;
+		else if (tecla == 38) this._direcaoDesejada = _CIMA;
+		else if (tecla == 40) this._direcaoDesejada = _BAIXO;
+	}
+
+	get direcao() {
+		return this._direcao;
+	}
+
+	get direcaoDesejada() {
+		return this._direcaoDesejada;
+	}
+
 	get controlaBoca(){
 		return this._controlaBoca;
 	}
