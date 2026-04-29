@@ -24,6 +24,9 @@ class Game {
         this.tempoDeMorte = 0;
         this.fantasmasComidos = 0;
         this.pcs = 0;
+        this.dotCount = 0;
+        this.somFruta = new Audio('pacman_eatfruit.wav');
+        this.fruta = null;
     }
 
 	set pacman(value){
@@ -175,6 +178,9 @@ class Game {
             this.atores.push(this.roxo);
 
 
+            this.fruta = new Fruta('fruta', this.ctx);
+            this.atores.push(this.fruta);
+
             this.intervalId = setInterval(this.draw, 10, this);
         }
     }
@@ -273,10 +279,26 @@ class Game {
             }
             
 
+            if (self.atores[i] instanceof Fruta){
+                self.atores[i].tick();
+                if (self.atores[i].ativa && !self.atores[i].morreu){
+                    if (self.pacman.detectarColisao(self.atores[i])){
+                        self.score += self.atores[i].pontos;
+                        self.atores[i]._morreu = true;
+                        self.atores[i].ativa = false;
+                        self.somFruta.play();
+                    }
+                }
+            }
+
             if (self.atores[i] instanceof Ponto){
                 if (!self.atores[i].morreu){
                     if (self.atores[i].dead(self.pacman)){
                         self.score += 10;
+                        self.dotCount++;
+                        if (self.dotCount === 70 || self.dotCount === 170){
+                            self.fruta.ativar(252, 306, 1);
+                        }
                         if (self.pcs==0) {
                             self.somDot1.volume = 0.8;
                             self.pcs = 1;

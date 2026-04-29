@@ -40,12 +40,10 @@ Lista priorizada de tudo que falta ou precisa ser melhorado no projeto.
 - Ao perder todas as vidas: exibe GAME OVER com score final e high score no canvas
 - HUD exibe mini-pacmans amarelos como ícones de vida (canto direito)
 
-### 7. Frutas bônus
-- No original, uma fruta aparece no centro do mapa após o Pacman comer 70 bolinhas (e novamente aos 170)
-- Criar classe `Fruta` extendendo `Ator` (similar à `Vitamina`)
-- Frutas por nível: cereja (100pts), morango (300pts), laranja (500pts), maçã (700pts), melão (1000pts)
-- A fruta fica no mapa por ~10 segundos e some se não for comida
-- Exibir sprite correspondente ao nível atual
+### ~~7. Frutas bônus~~ ✅
+- Corrigido: classe `Fruta` criada em `fruta.js`; aparece após 70 e 170 bolinhas comidas, fica ativa ~10s e some se não for comida
+- Pontuação por nível: cereja 100, morango 300, laranja 500, maçã 700, melão 1000
+- Som `pacman_eatfruit.wav` ao comer; desenhada no canvas com círculo colorido + caule (sem depender de sprite)
 
 ### ~~8. Navegação mais fluida (buffer de direção)~~ ✅
 - ~~Atualmente o Pacman trava se o jogador pressiona uma direção onde há parede~~
