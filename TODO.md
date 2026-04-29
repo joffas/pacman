@@ -8,22 +8,24 @@ Lista priorizada de tudo que falta ou precisa ser melhorado no projeto.
 
 ## CRÍTICO (quebra a jogabilidade)
 
-### 1. Canvas com tamanho errado
-- `jogo.html` define o canvas como `300x300`, mas o jogo usa `580x600`
-- O jogo está cortado — precisa corrigir o HTML para `width="580" height="600"`
+### ~~1. Canvas com tamanho errado~~ ✅
+- ~~`jogo.html` define o canvas como `300x300`, mas o jogo usa `580x600`~~
+- Corrigido: `width="580" height="600"` em `jogo.html`
 
-### 2. Pacman morreu mas o jogo continua
-- Quando um fantasma encosta no Pacman, `pacman.morreu = true` é setado
-- O loop continua rodando normalmente — não para, não mostra tela de game over, não desconta vida
-- Precisa detectar a morte e pausar o jogo / reiniciar a rodada
+### ~~2. Pacman morreu mas o jogo continua~~ ✅
+- ~~Quando um fantasma encosta no Pacman, `pacman.morreu = true` é setado~~
+- ~~O loop continua rodando normalmente — não para, não mostra tela de game over, não desconta vida~~
+- Corrigido: loop detecta `pacman.morreu`, para o interval, para a sirene e exibe "GAME OVER" no canvas
 
-### 3. Vitaminado dura tempo absurdo
-- `vitaminado` começa em `150000` e é decrementado 1 por frame
-- A 100fps isso daria ~25 minutos de poder — precisa ajustar para ~5–10 segundos (~500–1000 frames a 100fps)
+### ~~3. Vitaminado dura tempo absurdo~~ ✅
+- ~~`vitaminado` começa em `150000` e é decrementado 1 por frame~~
+- ~~A 100fps isso daria ~25 minutos de poder~~
+- Corrigido: valor ajustado para `700` (~7 segundos a 100fps)
 
-### 4. Som dos pontos com bug
-- O contador `pcs` passa de 0→1 e imediatamente entra no bloco `pcs==1` no mesmo frame
-- Os dois sons disparam ao mesmo tempo — precisa de `else if` ou lógica de alternância correta
+### ~~4. Som dos pontos com bug~~ ✅
+- ~~O contador `pcs` passa de 0→1 e imediatamente entra no bloco `pcs==1` no mesmo frame~~
+- ~~Os dois sons disparam ao mesmo tempo~~
+- Corrigido: `if/if/if` substituído por `if/else if/else if`, cada estado usa seu próprio Audio (`somDot1`, `somDot2`, `somDot3`)
 
 ---
 

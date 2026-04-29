@@ -36,7 +36,7 @@ class Game {
             this.inicio = true;
             this.somInicio.play();
         }
-        this.pacman.direcao = evt.keyCode;//true
+        if (this.pacman) this.pacman.direcao = evt.keyCode;
     }
 
     keyUp(evt){
@@ -97,7 +97,7 @@ class Game {
 
 
             this.pcs = 0;
-            return setInterval(this.draw, 10, this/*Deve ser passado por parametro para usar no draw*/);
+            this.intervalId = setInterval(this.draw, 10, this);
         }
     }
 
@@ -117,12 +117,23 @@ class Game {
         }
         
         
+       if (self.inicio && self.pacman.morreu){
+            self.somGame.pause();
+            clearInterval(self.intervalId);
+            self.clear();
+            self.ctx.fillStyle = 'red';
+            self.ctx.font = 'bold 48px Arial';
+            self.ctx.textAlign = 'center';
+            self.ctx.fillText('GAME OVER', self.width / 2, self.height / 2);
+            return;
+        }
+
 	   if (self.inicio){
            self.clear();
         for (var i in self.atores){
             if (self.atores[i] instanceof Vitamina){
                 if (self.atores[i].dead(self.pacman)){
-                    self.pacman.vitaminado = 150000;
+                    self.pacman.vitaminado = 700;
                     for (var x in self.atores){
                         if (self.atores[x] instanceof Fantasma)
                             self.atores[x].fraco = true;
@@ -158,27 +169,19 @@ class Game {
                 if (!self.atores[i].morreu){
                     if (self.atores[i].dead(self.pacman)){
         //                self.somDot.play();
-                        if (self.pcs==0)
-                            if ((self.somDot1.currentTime==self.somDot1.duration)||
-                                (self.somDot1.currentTime==0)){
-                                self.somDot1.volume = 0.8;
-                                self.pcs = 1;
-                                self.somDot1.play();
-                            }
-                        if (self.pcs==1)
-                            if ((self.somDot1.currentTime==self.somDot1.duration)||
-                                (self.somDot1.currentTime==0)){
-                                self.somDot1.volume = 0.8;
-                                self.pcs = 2;
-                                self.somDot1.play();
-                            }
-                        if (self.pcs==2)
-                            if ((self.somDot1.currentTime==self.somDot1.duration)||
-                                (self.somDot1.currentTime==0)){
-                                self.somDot1.volume = 0.8;
-                                self.pcs = 0;
-                                self.somDot1.play();
-                            }
+                        if (self.pcs==0) {
+                            self.somDot1.volume = 0.8;
+                            self.pcs = 1;
+                            self.somDot1.play();
+                        } else if (self.pcs==1) {
+                            self.somDot2.volume = 0.8;
+                            self.pcs = 2;
+                            self.somDot2.play();
+                        } else if (self.pcs==2) {
+                            self.somDot3.volume = 0.8;
+                            self.pcs = 0;
+                            self.somDot3.play();
+                        }
                                 
                     }
                 }
