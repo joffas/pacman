@@ -84,78 +84,110 @@ class Game {
         var W   = this.width;
         var H   = this.height;
 
-        // fundo preto
-        ctx.fillStyle = '#000';
+        // fundo gradiente azul-escuro
+        var grad = ctx.createLinearGradient(0, 0, 0, H + 40);
+        grad.addColorStop(0, '#0a0030');
+        grad.addColorStop(1, '#000015');
+        ctx.fillStyle = grad;
         ctx.fillRect(0, 0, W, H + 40);
 
-        // scan-lines estilo CRT
-        ctx.fillStyle = 'rgba(0,0,0,0.18)';
-        for (var sl = 0; sl < H; sl += 4) ctx.fillRect(0, sl, W, 2);
+        // pontos flutuantes no fundo
+        if (!this._introStars) {
+            this._introStars = [];
+            for (var s = 0; s < 35; s++)
+                this._introStars.push({
+                    x: Math.random() * W, y: Math.random() * H,
+                    r: Math.random() * 2.5 + 1, phase: Math.random() * Math.PI * 2
+                });
+        }
+        for (var s = 0; s < this._introStars.length; s++) {
+            var st = this._introStars[s];
+            var a = 0.2 + 0.25 * Math.sin(f * 0.03 + st.phase);
+            ctx.beginPath();
+            ctx.arc(st.x, st.y + Math.sin(f * 0.012 + st.phase) * 6, st.r, 0, Math.PI * 2);
+            ctx.fillStyle = 'rgba(255,210,0,' + a + ')';
+            ctx.fill();
+        }
 
-        // título — sombra laranja depois amarelo por cima
-        ctx.font = 'bold 72px monospace';
+        // título — cada letra numa cor de fantasma, quicando
+        var letras = 'PACMAN'.split('');
+        var cores  = ['#FF4444', '#FFB8FF', '#00FFFF', '#FFB852', '#00FF88', '#FF69B4'];
+        ctx.font = 'bold 78px monospace';
+        ctx.textAlign = 'left';
+        var lw = 62, startX = W / 2 - (letras.length * lw) / 2;
+        for (var li = 0; li < letras.length; li++) {
+            var bounce = Math.sin(f * 0.06 + li * 0.9) * 8;
+            ctx.fillStyle = cores[li];
+            ctx.fillText(letras[li], startX + li * lw, 108 + bounce);
+        }
+
+        // "BY JOFFAS"
         ctx.textAlign = 'center';
-        ctx.fillStyle = '#FF4500';
-        ctx.fillText('PAC-MAN', W / 2 + 4, 124);
-        ctx.fillStyle = '#FFD700';
-        ctx.fillText('PAC-MAN', W / 2, 120);
-
-        // sub-título
-        ctx.font = '16px monospace';
-        ctx.fillStyle = '#FF69B4';
-        ctx.fillText('ORIGINAL BY NAMCO  1980', W / 2, 158);
-
-        // high score
-        ctx.font = 'bold 16px monospace';
-        ctx.fillStyle = '#FF0000';
-        ctx.fillText('- HIGH SCORE -', W / 2, 200);
-        ctx.fillStyle = '#fff';
         ctx.font = 'bold 26px monospace';
-        ctx.fillText(this.highScore, W / 2, 232);
+        ctx.fillStyle = '#00FFFF';
+        ctx.fillText('BY  JOFFAS', W / 2, 150);
 
-        // cena de perseguição animada
-        var chaseX = ((f * 2.5) % (W + 220)) - 110;
+        // best score
+        ctx.font = '15px monospace';
+        ctx.fillStyle = '#888';
+        ctx.fillText('BEST  SCORE', W / 2, 190);
+        ctx.fillStyle = '#FFD700';
+        ctx.font = 'bold 22px monospace';
+        ctx.fillText(this.highScore, W / 2, 218);
 
-        // pontos na linha
-        for (var dx = 12; dx < W; dx += 22) {
-            if (dx > chaseX + 18) {
+        // animação circular — pacman perseguindo fantasma
+        var cx = W / 2, cy = 340, cr = 85, numDots = 18;
+        var pacA = (f * 0.032) % (Math.PI * 2);
+        var gstA = pacA + Math.PI * 1.15; // fantasma ~200° à frente
+
+        // trilha circular pontilhada
+        for (var d = 0; d < numDots; d++) {
+            var da = (d / numDots) * Math.PI * 2;
+            var rel = (da - pacA + Math.PI * 2) % (Math.PI * 2);
+            if (rel > 0.25) { // ainda não comido
                 ctx.beginPath();
-                ctx.arc(dx, 320, 3, 0, Math.PI * 2);
+                ctx.arc(cx + Math.cos(da) * cr, cy + Math.sin(da) * cr, 4, 0, Math.PI * 2);
                 ctx.fillStyle = '#FFD700';
                 ctx.fill();
             }
         }
 
-        // pacman com boca animada
-        var mouth = Math.abs(Math.sin(f * 0.18)) * 0.35;
+        // fantasma na trilha
+        var gfx = cx + Math.cos(gstA) * cr;
+        var gfy = cy + Math.sin(gstA) * cr;
+        this.desenharFantasmaIntro(gfx, gfy, '#FF4444');
+
+        // pacman na trilha
+        var px = cx + Math.cos(pacA) * cr;
+        var py = cy + Math.sin(pacA) * cr;
+        var mouth = Math.abs(Math.sin(f * 0.2)) * 0.35;
+        ctx.save();
+        ctx.translate(px, py);
+        ctx.rotate(pacA + Math.PI / 2);
         ctx.beginPath();
-        ctx.arc(chaseX, 320, 17, mouth * Math.PI, (2 - mouth) * Math.PI);
-        ctx.lineTo(chaseX, 320);
+        ctx.arc(0, 0, 16, mouth * Math.PI, (2 - mouth) * Math.PI);
+        ctx.lineTo(0, 0);
         ctx.closePath();
         ctx.fillStyle = '#FFD700';
         ctx.fill();
+        ctx.restore();
 
-        // fantasmas atrás do pacman
-        var cores = ['#FF0000', '#FFB8FF', '#00FFFF', '#FFB852'];
-        for (var g = 0; g < 4; g++)
-            this.desenharFantasmaIntro(chaseX - 58 - g * 44, 320, cores[g]);
+        // "PRESS ENTER" pulsando (escala, não pisca)
+        var pulse = 0.88 + 0.12 * Math.sin(f * 0.09);
+        ctx.save();
+        ctx.translate(W / 2, 468);
+        ctx.scale(pulse, pulse);
+        ctx.fillStyle = '#FFD700';
+        ctx.font = 'bold 20px monospace';
+        ctx.textAlign = 'center';
+        ctx.fillText('PRESS  ENTER  TO  START', 0, 0);
+        ctx.restore();
 
-        // "PRESS ENTER" piscando
-        if (Math.floor(f / 28) % 2 === 0) {
-            ctx.fillStyle = '#FFD700';
-            ctx.font = 'bold 20px monospace';
-            ctx.fillText('PRESS  ENTER  TO  START', W / 2, 440);
-        }
-
-        // dica de controles
-        ctx.fillStyle = '#888';
-        ctx.font = '14px monospace';
-        ctx.fillText('USE ARROW KEYS TO MOVE', W / 2, 492);
-
-        // crédito
-        ctx.fillStyle = '#FFB8FF';
-        ctx.font = '14px monospace';
-        ctx.fillText('© JOFFAS  2016', W / 2, 545);
+        // dica controles
+        ctx.fillStyle = '#555';
+        ctx.font = '13px monospace';
+        ctx.textAlign = 'center';
+        ctx.fillText('USE ARROW KEYS TO MOVE', W / 2, 516);
     }
 
     tentarVirar(){
