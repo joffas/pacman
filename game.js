@@ -39,7 +39,10 @@ class Game {
             this.inicio = true;
             this.somInicio.play();
         }
-        if (this.pacman) this.pacman.direcao = evt.keyCode;
+        if (this.pacman) {
+            this.pacman.direcao = evt.keyCode;           // aplica imediato (Ator)
+            this.pacman.direcaoDesejada = evt.keyCode;   // salva no buffer
+        }
     }
 
     keyUp(evt){
@@ -230,6 +233,17 @@ class Game {
 	   if (self.inicio){
            self.clear();
            self.tentarVirar();
+
+           // Countdown vitaminado: uma vez por frame (não por ator)
+           if (self.pacman.vitaminado > 0) {
+               self.pacman.vitaminado--;
+           } else {
+               for (var x in self.atores) {
+                   if (self.atores[x] instanceof Fantasma)
+                       self.atores[x].fraco = false;
+               }
+           }
+
         for (var i in self.atores){
             if (self.atores[i] instanceof Vitamina){
                 if (self.atores[i].dead(self.pacman)){
@@ -241,14 +255,6 @@ class Game {
                             self.atores[x].fraco = true;
                     }
                 }
-            }                      
-            if (self.pacman.vitaminado>0){
-                self.pacman.vitaminado = self.pacman.vitaminado - 1;
-            } else {
-                for (var x in self.atores){
-                    if (self.atores[x] instanceof Fantasma)
-                        self.atores[x].fraco = false;
-                }                
             }
             var pontosVivos = 0;
             if (self.passouFase==false){                

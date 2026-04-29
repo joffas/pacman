@@ -16,17 +16,13 @@ class Pacman extends Ator {
 		this._direcaoDesejada = 0;
     }
 
-	// Guarda a direção desejada em buffer sem aplicar imediatamente.
-	// game.js chama tentarVirar() a cada frame para aplicar quando o corredor estiver livre.
-	set direcao(tecla) {
+	// Buffer separado: keyDown seta direcao (imediato, via Ator) + direcaoDesejada (buffer).
+	// tentarVirar() aplica direcaoDesejada quando o corredor estiver livre.
+	set direcaoDesejada(tecla) {
 		if      (tecla == 39) this._direcaoDesejada = _DIREITA;
 		else if (tecla == 37) this._direcaoDesejada = _ESQUERDA;
 		else if (tecla == 38) this._direcaoDesejada = _CIMA;
 		else if (tecla == 40) this._direcaoDesejada = _BAIXO;
-	}
-
-	get direcao() {
-		return this._direcao;
 	}
 
 	get direcaoDesejada() {
