@@ -25,6 +25,7 @@ class Game {
         this.fantasmasComidos = 0;
         this.pcs = 0;
         this.dotCount = 0;
+        this.introFrame = 0;
         this.somFruta = new Audio('pacman_eatfruit.wav');
         this.fruta = null;
     }
@@ -54,6 +55,107 @@ class Game {
 
     clear(){
         this.ctx.clearRect(0, 0, this.width, this.height);
+    }
+
+    desenharFantasmaIntro(x, y, color) {
+        var ctx = this.ctx;
+        var r = 15;
+        ctx.beginPath();
+        ctx.arc(x, y - r / 2, r, Math.PI, 0);
+        ctx.lineTo(x + r, y + r / 2);
+        var segs = 3, sw = (r * 2) / segs;
+        for (var i = segs; i >= 0; i--)
+            ctx.lineTo(x - r + sw * i, y + r / 2 + (i % 2 === 0 ? r / 2 : 0));
+        ctx.closePath();
+        ctx.fillStyle = color;
+        ctx.fill();
+        ctx.beginPath(); ctx.arc(x - 5, y - r / 2 - 1, 4, 0, Math.PI * 2);
+        ctx.fillStyle = '#fff'; ctx.fill();
+        ctx.beginPath(); ctx.arc(x + 5, y - r / 2 - 1, 4, 0, Math.PI * 2); ctx.fill();
+        ctx.beginPath(); ctx.arc(x - 4, y - r / 2, 2, 0, Math.PI * 2);
+        ctx.fillStyle = '#00f'; ctx.fill();
+        ctx.beginPath(); ctx.arc(x + 6, y - r / 2, 2, 0, Math.PI * 2); ctx.fill();
+    }
+
+    desenharIntro() {
+        this.introFrame++;
+        var f   = this.introFrame;
+        var ctx = this.ctx;
+        var W   = this.width;
+        var H   = this.height;
+
+        // fundo preto
+        ctx.fillStyle = '#000';
+        ctx.fillRect(0, 0, W, H + 40);
+
+        // scan-lines estilo CRT
+        ctx.fillStyle = 'rgba(0,0,0,0.18)';
+        for (var sl = 0; sl < H; sl += 4) ctx.fillRect(0, sl, W, 2);
+
+        // título — sombra laranja depois amarelo por cima
+        ctx.font = 'bold 72px monospace';
+        ctx.textAlign = 'center';
+        ctx.fillStyle = '#FF4500';
+        ctx.fillText('PAC-MAN', W / 2 + 4, 124);
+        ctx.fillStyle = '#FFD700';
+        ctx.fillText('PAC-MAN', W / 2, 120);
+
+        // sub-título
+        ctx.font = '16px monospace';
+        ctx.fillStyle = '#FF69B4';
+        ctx.fillText('ORIGINAL BY NAMCO  1980', W / 2, 158);
+
+        // high score
+        ctx.font = 'bold 16px monospace';
+        ctx.fillStyle = '#FF0000';
+        ctx.fillText('- HIGH SCORE -', W / 2, 200);
+        ctx.fillStyle = '#fff';
+        ctx.font = 'bold 26px monospace';
+        ctx.fillText(this.highScore, W / 2, 232);
+
+        // cena de perseguição animada
+        var chaseX = ((f * 2.5) % (W + 220)) - 110;
+
+        // pontos na linha
+        for (var dx = 12; dx < W; dx += 22) {
+            if (dx > chaseX + 18) {
+                ctx.beginPath();
+                ctx.arc(dx, 320, 3, 0, Math.PI * 2);
+                ctx.fillStyle = '#FFD700';
+                ctx.fill();
+            }
+        }
+
+        // pacman com boca animada
+        var mouth = Math.abs(Math.sin(f * 0.18)) * 0.35;
+        ctx.beginPath();
+        ctx.arc(chaseX, 320, 17, mouth * Math.PI, (2 - mouth) * Math.PI);
+        ctx.lineTo(chaseX, 320);
+        ctx.closePath();
+        ctx.fillStyle = '#FFD700';
+        ctx.fill();
+
+        // fantasmas atrás do pacman
+        var cores = ['#FF0000', '#FFB8FF', '#00FFFF', '#FFB852'];
+        for (var g = 0; g < 4; g++)
+            this.desenharFantasmaIntro(chaseX - 58 - g * 44, 320, cores[g]);
+
+        // "PRESS ENTER" piscando
+        if (Math.floor(f / 28) % 2 === 0) {
+            ctx.fillStyle = '#FFD700';
+            ctx.font = 'bold 20px monospace';
+            ctx.fillText('PRESS  ENTER  TO  START', W / 2, 440);
+        }
+
+        // dica de controles
+        ctx.fillStyle = '#888';
+        ctx.font = '14px monospace';
+        ctx.fillText('USE ARROW KEYS TO MOVE', W / 2, 492);
+
+        // crédito
+        ctx.fillStyle = '#FFB8FF';
+        ctx.font = '14px monospace';
+        ctx.fillText('© JOFFAS  2016', W / 2, 545);
     }
 
     tentarVirar(){
@@ -187,17 +289,7 @@ class Game {
 
     draw(self){
         if (!self.inicio){
-            self.clear();
-		    var sprite = new Image();
-		    sprite.src = 'inicio.png';        
-            self.ctx.drawImage(sprite,
-                //corte boca aberta - pacman
-                0,0,333,198,
-                //onde ele esta agora
-                100, 100,
-                //tamanho do personagem
-                333,198
-                );
+            self.desenharIntro();
         }
         
         
