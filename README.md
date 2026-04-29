@@ -1,5 +1,7 @@
 # Pacman — JavaScript / ECMAScript 6
 
+[![TODO](https://img.shields.io/badge/📋-TODO-blue)](TODO.md)
+
 Projeto iniciado em 2016 como exercício prático de aprendizado de JavaScript puro usando Canvas 2D e orientação a objetos com ES6 Classes.
 
 ## Tecnologias
