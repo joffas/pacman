@@ -1,5 +1,7 @@
 # TODO — Melhorias e funcionalidades pendentes
 
+[![README](https://img.shields.io/badge/📖-README-blue)](README.md)
+
 Lista priorizada de tudo que falta ou precisa ser melhorado no projeto.
 
 ---
