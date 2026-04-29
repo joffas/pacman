@@ -10,17 +10,20 @@ class Game {
         this.vermelho = null;
         this.Mapa = null;
         this.somInicio = new Audio('pacman_beginning.wav');
-        //this.somGame = new Audio('pacman_chomp.wav');
         this.somGame = new Audio('siren.wav');
         this.passouFase = false;
-        this.somFantasmaDead = new Audio('pacman_eatghost.wav');        
+        this.somFantasmaDead = new Audio('pacman_eatghost.wav');
         this.somDot1 = new Audio('dot.wav');
         this.somDot2 = new Audio('dot1.wav');
-        this.somDot3 = new Audio('dot2.wav');        
-        //Atores
-        //this.pacman = null;
+        this.somDot3 = new Audio('dot2.wav');
         this.inicio = false;
         this.atores = new Array();
+        this.score = 0;
+        this.highScore = parseInt(localStorage.getItem('pacman_highscore') || '0');
+        this.vidas = 3;
+        this.tempoDeMorte = 0;
+        this.fantasmasComidos = 0;
+        this.pcs = 0;
     }
 
 	set pacman(value){
@@ -80,13 +83,53 @@ class Game {
         }
     }
 
+    reiniciarRodada(){
+        var fantasmas = [this.azul, this.vermelho, this.verde, this.rosa, this.roxo];
+        this.pacman._morreu = false;
+        this.pacman.left = this.pacman.__left;
+        this.pacman.top  = this.pacman.__top;
+        this.pacman._direcao = 0;
+        this.pacman._direcaoDesejada = 0;
+        this.pacman.vitaminado = 0;
+        this.pacman.imagem = 318;
+        fantasmas.forEach(f => {
+            f.left = f.__left;
+            f.top  = f.__top;
+            f._morreu = false;
+            f.fraco = false;
+        });
+        this.tempoDeMorte = 0;
+        this.fantasmasComidos = 0;
+        this.somGame.currentTime = 0;
+    }
+
+    desenharHUD(){
+        var hY = 620;
+        this.ctx.fillStyle = '#000';
+        this.ctx.fillRect(0, 600, this.width, 40);
+        this.ctx.fillStyle = '#fff';
+        this.ctx.font = 'bold 16px Arial';
+        this.ctx.textAlign = 'left';
+        this.ctx.fillText('SCORE  ' + this.score, 10, hY);
+        this.ctx.textAlign = 'center';
+        this.ctx.fillText('BEST  ' + this.highScore, 290, hY);
+        for (var i = 0; i < this.vidas; i++) {
+            this.ctx.beginPath();
+            this.ctx.arc(430 + i * 28, hY - 6, 9, 0.25 * Math.PI, 1.75 * Math.PI);
+            this.ctx.lineTo(430 + i * 28, hY - 6);
+            this.ctx.closePath();
+            this.ctx.fillStyle = '#FFD700';
+            this.ctx.fill();
+        }
+    }
+
     init(){
         this.canvas = document.getElementById("canvas");
         if (this.canvas.getContext) {
 
             this.ctx = this.canvas.getContext("2d");
             this.canvas.width = this.width;
-            this.canvas.height = this.height;
+            this.canvas.height = this.height + 40; // +40 para HUD
            
             
             //this.canvas.c
@@ -129,7 +172,6 @@ class Game {
             this.atores.push(this.roxo);
 
 
-            this.pcs = 0;
             this.intervalId = setInterval(this.draw, 10, this);
         }
     }
@@ -151,13 +193,37 @@ class Game {
         
         
        if (self.inicio && self.pacman.morreu){
-            self.somGame.pause();
-            clearInterval(self.intervalId);
+            self.tempoDeMorte++;
             self.clear();
-            self.ctx.fillStyle = 'red';
-            self.ctx.font = 'bold 48px Arial';
-            self.ctx.textAlign = 'center';
-            self.ctx.fillText('GAME OVER', self.width / 2, self.height / 2);
+            for (var x in self.atores) {
+                if (!(self.atores[x] instanceof Fantasma))
+                    self.atores[x].paint();
+            }
+            self.pacman.paint();
+            self.desenharHUD();
+            if (self.tempoDeMorte > 150) {
+                self.vidas--;
+                if (self.vidas <= 0) {
+                    if (self.score > self.highScore) {
+                        self.highScore = self.score;
+                        localStorage.setItem('pacman_highscore', self.highScore);
+                    }
+                    self.somGame.pause();
+                    clearInterval(self.intervalId);
+                    self.ctx.fillStyle = '#000';
+                    self.ctx.fillRect(0, 0, self.width, self.height + 40);
+                    self.ctx.fillStyle = 'red';
+                    self.ctx.font = 'bold 48px Arial';
+                    self.ctx.textAlign = 'center';
+                    self.ctx.fillText('GAME OVER', self.width / 2, self.height / 2 - 20);
+                    self.ctx.fillStyle = '#fff';
+                    self.ctx.font = '24px Arial';
+                    self.ctx.fillText('SCORE: ' + self.score, self.width / 2, self.height / 2 + 30);
+                    self.ctx.fillText('BEST: ' + self.highScore, self.width / 2, self.height / 2 + 65);
+                } else {
+                    self.reiniciarRodada();
+                }
+            }
             return;
         }
 
@@ -167,13 +233,15 @@ class Game {
         for (var i in self.atores){
             if (self.atores[i] instanceof Vitamina){
                 if (self.atores[i].dead(self.pacman)){
+                    self.score += 50;
                     self.pacman.vitaminado = 700;
+                    self.fantasmasComidos = 0;
                     for (var x in self.atores){
                         if (self.atores[x] instanceof Fantasma)
                             self.atores[x].fraco = true;
                     }
                 }
-            }                        
+            }                      
             if (self.pacman.vitaminado>0){
                 self.pacman.vitaminado = self.pacman.vitaminado - 1;
             } else {
@@ -202,7 +270,7 @@ class Game {
             if (self.atores[i] instanceof Ponto){
                 if (!self.atores[i].morreu){
                     if (self.atores[i].dead(self.pacman)){
-        //                self.somDot.play();
+                        self.score += 10;
                         if (self.pcs==0) {
                             self.somDot1.volume = 0.8;
                             self.pcs = 1;
@@ -224,6 +292,8 @@ class Game {
                 if (self.atores[i].fraco){
                     if  (self.atores[i].morreu==false){
                         if (self.atores[i].dead(self.pacman)){
+                            self.score += 200 * Math.pow(2, self.fantasmasComidos);
+                            self.fantasmasComidos++;
                             self.somFantasmaDead.play();
                         }
                     }
@@ -257,7 +327,7 @@ class Game {
             self.atores[i].updatePosicaoXY();
             self.atores[i].paint();
         }
-
+        self.desenharHUD();
         }
     }
 }

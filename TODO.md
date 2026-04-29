@@ -31,22 +31,14 @@ Lista priorizada de tudo que falta ou precisa ser melhorado no projeto.
 
 ## ALTA PRIORIDADE (funcionalidades pedidas)
 
-### 5. Sistema de pontuação (score)
-- Nenhum ponto é contabilizado ao comer bolinhas, vitaminas ou fantasmas
-- Implementar variável `score` no `Game`
-- Valores sugeridos (originais do arcade):
-  - Bolinha: 10 pts
-  - Vitamina: 50 pts
-  - Fantasma (1º): 200, (2º): 400, (3º): 800, (4º): 1600 pts
-  - Fruta: varia por nível (ver item de frutas)
-- Exibir score no topo do canvas em texto
-- Guardar high score na `localStorage`
+### ~~5. Sistema de pontuação (score)~~ ✅
+- Corrigido: bolinha +10, vitamina +50, fantasma combo 200/400/800/1600 pts
+- HUD exibe score (esquerda) e high score (centro) — high score salvo em `localStorage`
 
-### 6. Sistema de vidas
-- Pacman deve começar com 3 vidas
-- Ao morrer: tocar animação de morte, decrementar vida, reposicionar todos os atores, reiniciar rodada
-- Ao perder todas as vidas: mostrar tela de **Game Over** com score final e opção de reiniciar
-- Exibir ícones de vida restantes no HUD (bolinhas ou mini-pacmans)
+### ~~6. Sistema de vidas~~ ✅
+- Corrigido: Pacman começa com 3 vidas; ao morrer aguarda 1,5s de animação, decrementa vida e reposiciona todos os atores
+- Ao perder todas as vidas: exibe GAME OVER com score final e high score no canvas
+- HUD exibe mini-pacmans amarelos como ícones de vida (canto direito)
 
 ### 7. Frutas bônus
 - No original, uma fruta aparece no centro do mapa após o Pacman comer 70 bolinhas (e novamente aos 170)
