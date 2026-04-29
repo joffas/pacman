@@ -1,36 +1,55 @@
-[![Build Status](https://travis-ci.org/OTRS/otrs.svg?branch=master)](https://github.com/joffas/pacman.git)
+# Pacman — JavaScript / ECMAScript 6
 
-PACMAN JavaScrip ECMAScript 6
-=============================
+Projeto iniciado em 2016 como exercício prático de aprendizado de JavaScript puro usando Canvas 2D e orientação a objetos com ES6 Classes.
 
-Proximos Passos
-===============
-    1 - Criar Map
-      1.1 - Definir uma classe para o map (OK)
-      1.2 - Criar Level
-      2.3 - Tunel do map (ok)
-      2.4 - Ideia futura, fazer um map dinamico a partir de uma imagem
-      2.5 - definir margens
+## Tecnologias
 
-    2 - Morte
-      2.1 - Alterar Imagens (Animação)
-      2.2 - Contabilizar Vidas
+- HTML5 Canvas (renderização 2D)
+- JavaScript ES6 (Classes, getters/setters, `const`, `let`)
+- Web Audio API (sons nativos do browser, sem bibliotecas)
+- Sem dependências externas — abre direto no browser
 
-    3 - Comer Itens da Tela
-      3.1 - Criar uma classe base para os itens de tela (OK)
-      3.2 - Classe para pontinhos (OK)
-      3.3 - Classe para Vitamina - para comer fantasmas (OK)
-      3.4 - Classe para frutas
+## Como rodar
 
-    4 - Jogabilidade
-      4.1 - Melhorar Locomoção pacman, detectando proxima entrada
-      4.2 - Mover fantasmas (Algoritimo de Inteligencia). (OK)
-      4.3 - Fantama morrendo volta pra casa e renasce
-      4.4 - Tempo da vitamina (OK)
-      4.5 - Ao comer todos os pinos acaba a fase (ok)
-      4.6 - contabilizar pontos
-      4.7 - contabilizar vidas
+Basta abrir `jogo.html` em qualquer browser moderno.  
+Pressione **Enter** para iniciar o jogo e use as **setas do teclado** para mover o Pacman.
 
-    5 - Outras tarefas
-      5.1 - Pause
-      5.2 - Opção multiplayer no mesmo map
+> **Atenção:** por usar `Audio` e `Canvas`, o arquivo precisa ser servido via HTTP local (ex.: extensão Live Server no VS Code, `python3 -m http.server`, etc.) para evitar bloqueios de CORS no carregamento de áudio.
+
+## Estrutura dos arquivos
+
+```
+jogo.html        — página principal, instancia o Game
+game.js          — loop principal do jogo e gerenciamento dos atores
+ator.js          — classe base com movimento, colisão e getters/setters
+pacman.js        — sprite e lógica do Pacman
+fantasma.js      — sprite e lógica dos fantasmas
+mapa.js          — construção do labirinto, posicionamento dos pontos e vitaminas
+bloco.js         — paredes do labirinto
+ponto.js         — bolinhas colecionáveis
+vitamina.js      — power pellets (deixam fantasmas vulneráveis)
+sprites.png      — sprite sheet com todos os personagens
+cenario.png      — sprite sheet do cenário (blocos, pontos, vitaminas)
+*.wav / *.mp3    — efeitos sonoros originais do arcade
+```
+
+## O que já funciona
+
+- Labirinto completo com paredes e colisão
+- Pacman se move nas quatro direções (setas do teclado)
+- 5 fantasmas com velocidades distintas (0.7 → 1.1)
+- Colisão Pacman ↔ parede e fantasma ↔ parede
+- Vitaminas: ao comer, fantasmas ficam vulneráveis (azuis) por um período
+- Pacman pode comer fantasmas vulneráveis
+- Bolinhas colecionáveis: ao comer todas, passa de fase
+- Túnel lateral (Pacman sai de um lado e entra no outro)
+- Efeitos sonoros: início, sirene, morte, comer ponto, comer fantasma
+- Tela de início com imagem e pressione Enter
+
+## Histórico de commits relevantes
+
+O projeto evoluiu de um experimento simples de canvas para um clone jogável do Pacman com colisões, sprites, sons e lógica de fases. O histórico inclui desde a primeira tela de início até a detecção de vitaminas e morte dos fantasmas.
+
+---
+
+*Projeto pessoal — aprendizado de JavaScript. Código em português para facilitar o entendimento durante o processo de aprendizado.*
