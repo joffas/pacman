@@ -43,15 +43,11 @@ class Game {
             this.inicio = true;
             this.somInicio.play();
         }
-        if (this.pacman) {
-            this.pacman.direcao = evt.keyCode;           // aplica imediato (Ator)
-            this.pacman.direcaoDesejada = evt.keyCode;   // salva no buffer
-        }
+        if (this.pacman)
+            this.pacman.direcaoDesejada = evt.keyCode;
     }
 
-    keyUp(evt){
-        this.pacman.direcao = evt.keyCode;//,false);
-    }
+    keyUp(evt){}
 
     clear(){
         this.ctx.clearRect(0, 0, this.width, this.height);
@@ -192,9 +188,10 @@ class Game {
 
     tentarVirar(){
         var d = this.pacman.direcaoDesejada;
-        if (!d || d === this.pacman.direcao) return;
+        if (!d) return;
 
         var cur = this.pacman.direcao;
+        if (d === cur) return;
 
         // Inversão de direção: sempre permite sem testar
         if ((cur == _DIREITA && d == _ESQUERDA) || (cur == _ESQUERDA && d == _DIREITA) ||
