@@ -205,13 +205,18 @@ class Game {
         var oldTop     = this.pacman.top;
         var isVertical = (d == _CIMA || d == _BAIXO);
 
-        // Testa se a posição (tl, tt) permite virar para d
+        // Testa se a posição (tl, tt) permite virar para d.
+        // Usa hitbox 1px menor (inset) para não tratar borda-tocando como colisão.
         var testPos = (tl, tt) => {
-            this.pacman.left = tl + (d == _DIREITA ? vel : d == _ESQUERDA ? -vel : 0);
-            this.pacman.top  = tt + (d == _BAIXO   ? vel : d == _CIMA     ? -vel : 0);
+            this.pacman.left    = tl + (d == _DIREITA ? vel : d == _ESQUERDA ? -vel : 0) + 1;
+            this.pacman.top     = tt + (d == _BAIXO   ? vel : d == _CIMA     ? -vel : 0) + 1;
+            this.pacman._width  = 30;
+            this.pacman._height = 30;
             var hit = this.atores.some(a => a instanceof Bloco && this.pacman.detectarColisao(a));
-            this.pacman.left = oldLeft;
-            this.pacman.top  = oldTop;
+            this.pacman._width  = 32;
+            this.pacman._height = 32;
+            this.pacman.left    = oldLeft;
+            this.pacman.top     = oldTop;
             return !hit;
         };
 
@@ -221,8 +226,8 @@ class Game {
             return;
         }
 
-        // 2. Ajustes perpendiculares pequenos (±2, ±4, ±6 px)
-        for (var off = 2; off <= 6; off += 2) {
+        // 2. Ajustes perpendiculares — cobre até metade da largura do corredor (±16 px)
+        for (var off = 2; off <= 16; off += 2) {
             var tlP = isVertical ? oldLeft + off : oldLeft;
             var ttP = isVertical ? oldTop        : oldTop + off;
             if (testPos(tlP, ttP)) {
