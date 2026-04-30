@@ -194,32 +194,52 @@ class Game {
         var d = this.pacman.direcaoDesejada;
         if (!d || d === this.pacman.direcao) return;
 
-        var vel = this.pacman.velocidade;
-        var oldLeft = this.pacman.left;
-        var oldTop  = this.pacman.top;
+        var cur = this.pacman.direcao;
 
-        var podeVirar = (snapLeft, snapTop) => {
-            this.pacman.left = snapLeft + (d == _DIREITA ? vel : d == _ESQUERDA ? -vel : 0);
-            this.pacman.top  = snapTop  + (d == _BAIXO  ? vel : d == _CIMA     ? -vel : 0);
-            var colisao = this.atores.some(a => a instanceof Bloco && this.pacman.detectarColisao(a));
-            this.pacman.left = oldLeft;
-            this.pacman.top  = oldTop;
-            return !colisao;
-        };
-
-        // Tenta virar na posição atual
-        if (podeVirar(oldLeft, oldTop)) {
+        // Inversão de direção: sempre permite sem testar
+        if ((cur == _DIREITA && d == _ESQUERDA) || (cur == _ESQUERDA && d == _DIREITA) ||
+            (cur == _CIMA   && d == _BAIXO)    || (cur == _BAIXO   && d == _CIMA)) {
             this.pacman._direcao = d;
             return;
         }
 
-        // Tenta com snap ao grid de 18px (alinha ao corredor mais próximo)
-        var snapLeft = Math.round(oldLeft / 18) * 18;
-        var snapTop  = Math.round(oldTop  / 18) * 18;
-        if ((snapLeft !== oldLeft || snapTop !== oldTop) && podeVirar(snapLeft, snapTop)) {
-            this.pacman.left   = snapLeft;
-            this.pacman.top    = snapTop;
+        var vel        = this.pacman.velocidade;
+        var oldLeft    = this.pacman.left;
+        var oldTop     = this.pacman.top;
+        var isVertical = (d == _CIMA || d == _BAIXO);
+
+        // Testa se a posição (tl, tt) permite virar para d
+        var testPos = (tl, tt) => {
+            this.pacman.left = tl + (d == _DIREITA ? vel : d == _ESQUERDA ? -vel : 0);
+            this.pacman.top  = tt + (d == _BAIXO   ? vel : d == _CIMA     ? -vel : 0);
+            var hit = this.atores.some(a => a instanceof Bloco && this.pacman.detectarColisao(a));
+            this.pacman.left = oldLeft;
+            this.pacman.top  = oldTop;
+            return !hit;
+        };
+
+        // 1. Posição exata atual
+        if (testPos(oldLeft, oldTop)) {
             this.pacman._direcao = d;
+            return;
+        }
+
+        // 2. Ajustes perpendiculares pequenos (±2, ±4, ±6 px)
+        for (var off = 2; off <= 6; off += 2) {
+            var tlP = isVertical ? oldLeft + off : oldLeft;
+            var ttP = isVertical ? oldTop        : oldTop + off;
+            if (testPos(tlP, ttP)) {
+                if (isVertical) this.pacman.left = tlP; else this.pacman.top = ttP;
+                this.pacman._direcao = d;
+                return;
+            }
+            var tlN = isVertical ? oldLeft - off : oldLeft;
+            var ttN = isVertical ? oldTop        : oldTop - off;
+            if (testPos(tlN, ttN)) {
+                if (isVertical) this.pacman.left = tlN; else this.pacman.top = ttN;
+                this.pacman._direcao = d;
+                return;
+            }
         }
     }
 
