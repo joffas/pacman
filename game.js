@@ -3,8 +3,8 @@ class Game {
     constructor(name){
         this.name = name;
         this.atores = null;
-        this.width  = 580;
-        this.height = 600;
+        this.width  = 512;
+        this.height = 512;
         this.pacman = null;
         this.azul = null;
         this.vermelho = null;
@@ -261,19 +261,19 @@ class Game {
     }
 
     desenharHUD(){
-        var hY = 620;
+        var hY = this.height + 20;
         this.ctx.fillStyle = '#000';
-        this.ctx.fillRect(0, 600, this.width, 40);
+        this.ctx.fillRect(0, this.height, this.width, 40);
         this.ctx.fillStyle = '#fff';
         this.ctx.font = 'bold 16px Arial';
         this.ctx.textAlign = 'left';
         this.ctx.fillText('SCORE  ' + this.score, 10, hY);
         this.ctx.textAlign = 'center';
-        this.ctx.fillText('BEST  ' + this.highScore, 290, hY);
+        this.ctx.fillText('BEST  ' + this.highScore, this.width / 2, hY);
         for (var i = 0; i < this.vidas; i++) {
             this.ctx.beginPath();
-            this.ctx.arc(430 + i * 28, hY - 6, 9, 0.25 * Math.PI, 1.75 * Math.PI);
-            this.ctx.lineTo(430 + i * 28, hY - 6);
+            this.ctx.arc(this.width - 90 + i * 28, hY - 6, 9, 0.25 * Math.PI, 1.75 * Math.PI);
+            this.ctx.lineTo(this.width - 90 + i * 28, hY - 6);
             this.ctx.closePath();
             this.ctx.fillStyle = '#FFD700';
             this.ctx.fill();
@@ -438,7 +438,7 @@ class Game {
                         self.score += 10;
                         self.dotCount++;
                         if (self.dotCount === 70 || self.dotCount === 170){
-                            self.fruta.ativar(252, 306, 1);
+                            self.fruta.ativar(224, 272, 1);
                         }
                         if (self.pcs==0) {
                             self.somDot1.volume = 0.8;

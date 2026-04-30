@@ -1,7 +1,7 @@
 class Mapa {
 	
 	constructor(ctx, self) {
-        this.larguraLinhas = 9;
+        this.larguraLinhas = 8;
         this.tamanho = this.larguraLinhas*2;
         this.width = this.tamanho*32;
         this.height = this.tamanho*32;

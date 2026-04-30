@@ -155,14 +155,14 @@ class Ator {
 		}else{
 			if (this.direcao==_DIREITA) { 
 				this.left += this.velocidade;
-				if (this.left>600){
+				if (this.left>512){
 					this.left=-32;
-				} 
+				}
 			}//Direita
-			if (this.direcao==_ESQUERDA) { 
+			if (this.direcao==_ESQUERDA) {
 				this.left -= this.velocidade;
 				if (this.left<-32){
-					this.left=600;
+					this.left=512;
 				} 
 			}//Esquerda
 			if (this.direcao==_CIMA) { this.top -= this.velocidade }//Cima
