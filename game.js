@@ -255,10 +255,10 @@ class Game {
         this.pacman.vitaminado = 0;
         this.pacman.imagem = 318;
         fantasmas.forEach(f => {
-            f.left = f.__left;
-            f.top  = f.__top;
-            f._morreu = false;
-            f.fraco = false;
+            f.left   = f.__left;
+            f.top    = f.__top;
+            f.morreu = false;
+            f.fraco  = false;
         });
         this.tempoDeMorte = 0;
         this.fantasmasComidos = 0;
@@ -474,7 +474,7 @@ class Game {
                 }
             }
 
-            if (self.atores[i] instanceof Fantasma){
+            if (self.atores[i] instanceof Fantasma && !self.atores[i].morreu){
                 (self.pacman.dead(self.atores[i]))
             }           
             else
