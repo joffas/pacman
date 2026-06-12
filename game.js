@@ -283,13 +283,17 @@ class Game {
         this.somGame.currentTime = 0;
     }
 
-    // Marca como mortos os pontos cujo centro cai dentro de um bloco visível.
-    // Chamado na init e ao avançar de fase (ressurreição recria todos os pontos).
+    // Marca como mortos pontos fora do canvas ou dentro de blocos visíveis.
     filtrarPontosInvalidos(){
         this.atores.forEach(ponto => {
             if (!(ponto instanceof Ponto) || ponto.morreu) return;
             var cx = ponto.left + ponto.width  / 2;
             var cy = ponto.top  + ponto.height / 2;
+            // Centro fora do canvas → nunca alcançável
+            if (cx < 0 || cx >= this.width || cy < 0 || cy >= this.height) {
+                ponto.morreu = true;
+                return;
+            }
             var dentro = this.atores.some(b =>
                 b instanceof Bloco && b.pintar !== false &&
                 cx > b.left && cx < b.left + b.width &&
@@ -562,6 +566,24 @@ class Game {
                }
            }
 
+        // Verifica vitória antes do loop de atores (uma vez por frame)
+        if (!self.passouFase) {
+            var pontosVivos = 0;
+            for (var x in self.atores)
+                if (self.atores[x] instanceof Ponto && !self.atores[x].morreu) pontosVivos++;
+            if (pontosVivos === 0) {
+                self.passouFase = true;
+                self.tempoIntermissao = 0;
+                if (self.score > self.highScore) {
+                    self.highScore = self.score;
+                    localStorage.setItem('pacman_highscore', self.highScore);
+                }
+                self.somGame.pause();
+                self.somIntermission.play();
+                return;
+            }
+        }
+
         for (var i in self.atores){
             if (self.atores[i] instanceof Vitamina){
                 if (self.atores[i].dead(self.pacman)){
@@ -573,28 +595,6 @@ class Game {
                             self.atores[x].fraco = true;
                     }
                 }
-            }
-            var pontosVivos = 0;
-            if (self.passouFase==false){                
-                for (var x in self.atores){
-                    if (self.atores[x] instanceof Ponto){
-                        if (!self.atores[x].morreu){
-                            pontosVivos = pontosVivos + 1;
-                        }
-                    }
-                }
-                if  (pontosVivos==0){
-                    self.passouFase = true;
-                    self.tempoIntermissao = 0;
-                    if (self.score > self.highScore) {
-                        self.highScore = self.score;
-                        localStorage.setItem('pacman_highscore', self.highScore);
-                    }
-                    self.somGame.pause();
-                    self.somIntermission.play();
-                    return;
-                }
-
             }
             
 
