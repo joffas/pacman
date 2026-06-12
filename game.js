@@ -338,6 +338,32 @@ class Game {
         this.canvas.style.margin = '0 auto';
     }
 
+    // Controles de toque (celular): swipe move, toque inicia/despausa
+    configurarToque(){
+        var self = this;
+        var ini = { x: 0, y: 0 };
+        this.canvas.style.touchAction = 'none';
+        this.canvas.addEventListener('touchstart', function(e){
+            var t = e.changedTouches[0];
+            ini.x = t.clientX; ini.y = t.clientY;
+        }, { passive: true });
+        this.canvas.addEventListener('touchend', function(e){
+            var t = e.changedTouches[0];
+            var dx = t.clientX - ini.x, dy = t.clientY - ini.y;
+            var ax = Math.abs(dx), ay = Math.abs(dy);
+            if (ax < 24 && ay < 24){
+                // toque curto: começa o jogo ou despausa
+                if (!self.inicio){ self.inicio = true; self.somInicio.play(); }
+                else if (self.pausado){ self.pausado = false; }
+                return;
+            }
+            // swipe: define direção desejada
+            var tecla = (ax > ay) ? (dx > 0 ? 39 : 37) : (dy > 0 ? 40 : 38);
+            if (self.pacman) self.pacman.direcaoDesejada = tecla;
+            e.preventDefault();
+        }, { passive: false });
+    }
+
     init(){
         this.canvas = document.getElementById("canvas");
         if (this.canvas.getContext) {
@@ -346,6 +372,7 @@ class Game {
             this.canvas.width = this.width;
             this.canvas.height = this.height + 40; // +40 para HUD
             this.ajustarEscala();
+            this.configurarToque();
             window.addEventListener('resize', () => this.ajustarEscala());
            
             
