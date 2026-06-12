@@ -363,13 +363,24 @@ class Mapa {
         self.atores.push(bloco); 
 
         b2 = bloco;
-        bloco = new Bloco('bloco',ctx);        
+        bloco = new Bloco('bloco',ctx);
         bloco.left = this.larguraLinhas+this.tamanho*17;
         bloco.top = iTop-this.tamanho;
         bloco.height = this.tamanho*2;
         bloco.width = this.tamanho*4;
         bloco.pintar = false;
-        self.atores.push(bloco); 
+        self.atores.push(bloco);
+
+        // Portão da casa dos fantasmas: fecha o vão superior (x 232-280).
+        // Fantasmas em modo "saindo" ignoram colisões e atravessam;
+        // depois disso ninguém volta a entrar.
+        bloco = new Bloco('bloco',ctx);
+        bloco.left = this.larguraLinhas+this.tamanho*14;
+        bloco.top = iTop-this.tamanho*3;
+        bloco.height = this.tamanho;
+        bloco.width = this.tamanho*3;
+        bloco.pintar = false;
+        self.atores.push(bloco);
 
         //******************************************************* */
         //6 - Quarta faixa de blocos de cima para baixo        

@@ -10,6 +10,7 @@ class Fantasma extends Ator {
 		this.perfil = 'cacador';   // cacador | emboscar | timido
 		this.tempoSaida = 0;       // frames até sair da casa
 		this.preso = false;        // segurado na casa até liberar
+		this.saindo = false;       // saída roteirizada: sobe até o corredor
 		this.piscando = false;     // pisca quando a vitamina vai acabar
 	}
 
@@ -76,13 +77,25 @@ class Fantasma extends Ator {
 	}
 
 	aoColidirBloco(bloco, pacman) {
-		if (bloco.pintar === false) return; // ghosts pass through invisible house barriers
 		var dir = this.colidiu(bloco);
 		if (dir) this.escolherDirecao(pacman);
 	}
 
 	updatePosicaoXY() {
 		if (this.preso) return; // ainda na casa, aguardando liberação
+
+		if (this.saindo) {
+			// Saída roteirizada: sobe alinhado ao spawn até o corredor acima
+			// da casa (y=184), ignorando colisões; depois a IA assume
+			this.left = this.__left;
+			this.top -= this.velocidade;
+			if (this.top <= 184) {
+				this.top = 184;
+				this.saindo = false;
+				this._direcao = Math.random() < 0.5 ? _ESQUERDA : _DIREITA;
+			}
+			return;
+		}
 
 		if (!this.morreu) {
 			super.updatePosicaoXY();
@@ -97,6 +110,7 @@ class Fantasma extends Ator {
 			this.top    = this.__top;
 			this.morreu = false;
 			this.fraco  = false;
+			this.saindo = true; // renasceu dentro da casa: sai roteirizado
 		} else {
 			if      (dx > 0) this.left += speed;
 			else if (dx < 0) this.left -= speed;

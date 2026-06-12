@@ -49,23 +49,20 @@ class Ator {
 	}
 
 	colidiu(outro){
-		if (this.detectarColisao(outro)==true){
-			if (this.paraDireita){
-				this.left = this.left-this.velocidade;
-			}
-			if (this.paraEsquerda){
-				this.left = this.left+this.velocidade;
-			}			
-			if (this.paraCima){
-				this.top = this.top+this.velocidade;
-			}			
-			if (this.paraBaixo){
-				this.top = this.top-this.velocidade;
-			}		
-			return this.direcao;
-		}else{
-			return 0;
-		}
+		if (this.detectarColisao(outro)!=true) return 0;
+		// Resolve pelo eixo de menor penetração (independe da direção do
+		// movimento — empurrar pelo eixo errado fazia o ator atravessar paredes)
+		var penEsq   = (this.left + this.width)  - outro.left;
+		var penDir   = (outro.left + outro.width) - this.left;
+		var penCima  = (this.top + this.height)  - outro.top;
+		var penBaixo = (outro.top + outro.height) - this.top;
+		var menor = Math.min(penEsq, penDir, penCima, penBaixo);
+		if (menor <= 0) return 0; // só encostou na borda, sem invasão
+		if      (menor === penEsq)  this.left -= menor;
+		else if (menor === penDir)  this.left += menor;
+		else if (menor === penCima) this.top  -= menor;
+		else                        this.top  += menor;
+		return this.direcao;
 	}
 
 	vaiColidir(outro){

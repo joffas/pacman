@@ -273,7 +273,8 @@ class Game {
             f.morreu   = false;
             f.fraco    = false;
             f.piscando = false;
-            f.preso    = f.tempoSaida > 0;
+            f.preso    = true;
+            f.saindo   = false;
         });
         this.tempoDeMorte = 0;
         this.fantasmasComidos = 0;
@@ -337,30 +338,38 @@ class Game {
         this.canvas.style.margin = '0 auto';
     }
 
-    // Controles de toque (celular): swipe move, toque inicia/despausa
+    // Controles de toque (celular): swipe move, toque curto inicia/despausa.
+    // Direção avaliada no touchmove (primeiro movimento significativo) e na
+    // tela inteira — flick rápido ou segundo dedo não invertem mais o gesto.
     configurarToque(){
         var self = this;
-        var ini = { x: 0, y: 0 };
+        var ini = null;
         this.canvas.style.touchAction = 'none';
-        this.canvas.addEventListener('touchstart', function(e){
+        document.body.style.touchAction = 'none';
+        document.body.style.overscrollBehavior = 'none';
+        document.addEventListener('touchstart', function(e){
             var t = e.changedTouches[0];
-            ini.x = t.clientX; ini.y = t.clientY;
+            ini = { x: t.clientX, y: t.clientY, usado: false };
         }, { passive: true });
-        this.canvas.addEventListener('touchend', function(e){
+        document.addEventListener('touchmove', function(e){
+            if (!ini || ini.usado) return;
             var t = e.changedTouches[0];
             var dx = t.clientX - ini.x, dy = t.clientY - ini.y;
-            var ax = Math.abs(dx), ay = Math.abs(dy);
-            if (ax < 24 && ay < 24){
+            if (Math.abs(dx) < 20 && Math.abs(dy) < 20) return;
+            var tecla = (Math.abs(dx) > Math.abs(dy))
+                ? (dx > 0 ? 39 : 37)
+                : (dy > 0 ? 40 : 38);
+            if (self.pacman) self.pacman.direcaoDesejada = tecla;
+            ini.usado = true;
+        }, { passive: true });
+        document.addEventListener('touchend', function(){
+            if (ini && !ini.usado){
                 // toque curto: começa o jogo ou despausa
                 if (!self.inicio){ self.inicio = true; self.somInicio.play(); }
                 else if (self.pausado){ self.pausado = false; }
-                return;
             }
-            // swipe: define direção desejada
-            var tecla = (ax > ay) ? (dx > 0 ? 39 : 37) : (dy > 0 ? 40 : 38);
-            if (self.pacman) self.pacman.direcaoDesejada = tecla;
-            e.preventDefault();
-        }, { passive: false });
+            ini = null;
+        }, { passive: true });
     }
 
     init(){
@@ -422,7 +431,7 @@ class Game {
             this.verde.perfil    = 'timido';   this.verde.tempoSaida    = 180;
             this.roxo.perfil     = 'cacador';  this.roxo.tempoSaida     = 240;
             [this.vermelho, this.rosa, this.azul, this.verde, this.roxo]
-                .forEach(f => { f.preso = f.tempoSaida > 0; });
+                .forEach(f => { f.preso = true; }); // todos saem roteirizados na sua vez
 
             this.fruta = new Fruta('fruta', this.ctx);
             this.atores.push(this.fruta);
@@ -518,7 +527,10 @@ class Game {
            var fants = [self.azul, self.vermelho, self.verde, self.rosa, self.roxo];
            var piscar = self.pacman.vitaminado > 0 && self.pacman.vitaminado < 200;
            fants.forEach(f => {
-               if (f.preso && self.frameRodada >= f.tempoSaida) f.preso = false;
+               if (f.preso && self.frameRodada >= f.tempoSaida) {
+                   f.preso  = false;
+                   f.saindo = true; // sobe roteirizado até o corredor
+               }
                f.piscando = piscar;
            });
 
@@ -624,7 +636,8 @@ class Game {
                 if (self.atores[i] instanceof Bloco){
                     self.pacman.colidiu(self.atores[i]);
                     [self.azul, self.vermelho, self.verde, self.rosa, self.roxo].forEach(f => {
-                        if (!f.preso && !f.morreu) f.aoColidirBloco(self.atores[i], self.pacman);
+                        if (!f.preso && !f.morreu && !f.saindo)
+                            f.aoColidirBloco(self.atores[i], self.pacman);
                     });
                 }
             
