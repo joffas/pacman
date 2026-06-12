@@ -73,10 +73,10 @@ Lista priorizada de tudo que falta ou precisa ser melhorado no projeto.
 - Tela de vitória: "VOCÊ VENCEU!" com score e best; high score salvo
 - Tela de game over já desenhada no canvas com score final e best
 
-### 12. Múltiplos níveis
-- Ao passar de fase, aumentar velocidade dos fantasmas levemente
-- Reduzir duração da vitamina a cada nível
-- Exibir número da fase no HUD
+### ~~12. Múltiplos níveis~~ ✅
+- Corrigido: ao zerar as bolinhas mostra "FASE N COMPLETA" e avança para o próximo nível (jogo infinito, estilo arcade)
+- `proximaFase()`: ressuscita bolinhas/vitaminas, aumenta a velocidade dos fantasmas (+0.1) e reduz a duração da vitamina (700 → mínimo 200)
+- Número da fase exibido no HUD
 
 ### ~~13. Pausa~~ ✅
 - Corrigido: tecla `P` ou `Esc` pausa/despausa; overlay escurecido com "PAUSADO" no centro
@@ -97,23 +97,19 @@ Lista priorizada de tudo que falta ou precisa ser melhorado no projeto.
 ### ~~16. Fantasmas vulneráveis piscam antes de acabar o efeito~~ ✅
 - Corrigido: quando `vitaminado < 200` os fantasmas recebem `piscando=true` e alternam entre o sprite azul (`left=384`) e branco (`left=416`) a cada ~8 frames
 
-### 17. HUD completo
-- Exibir no canvas: Score | High Score | Fase | Vidas
-- Reservar uma faixa de 40px no topo ou rodapé para o HUD sem sobrepor o labirinto
+### ~~17. HUD completo~~ ✅
+- Corrigido: HUD na faixa de 40px do rodapé exibe SCORE | BEST | FASE | Vidas (ícones de mini-pacman)
 
-### 18. Sons faltando
-- `pacman_extrapac.wav` (vida extra) — nunca é tocado
-- `pacman_eatfruit.wav` — nunca é tocado (frutas não implementadas)
-- `pacman_intermission.wav` — nunca é tocado (tela entre fases não existe)
-- Após implementar as funcionalidades correspondentes, conectar os sons
+### ~~18. Sons faltando~~ ✅
+- Corrigido: `pacman_extrapac.wav` toca ao ganhar vida extra (a cada 10.000 pontos)
+- `pacman_eatfruit.wav` toca ao comer fruta
+- `pacman_intermission.wav` toca na tela entre fases
 
-### 19. Responsividade / escala
-- O jogo usa coordenadas fixas em pixels — em telas pequenas fica cortado
-- Implementar escala baseada no tamanho da janela usando `canvas.style.transform: scale()`
+### ~~19. Responsividade / escala~~ ✅
+- Corrigido: `ajustarEscala()` escala o canvas via `transform: scale()` para caber na janela mantendo a proporção; reaplica no `resize`
 
-### 20. Tecla Enter no keydown quebra se `pacman` ainda é `null`
-- Em `game.js:39`, `this.pacman.direcao = evt.keyCode` é chamado antes de qualquer verificação
-- Se Enter for pressionado muito cedo pode causar erro — adicionar `if (this.pacman)` como guarda
+### ~~20. Tecla Enter no keydown quebra se `pacman` ainda é `null`~~ ✅
+- Corrigido: `keyDown` usa `if (this.pacman)` como guarda antes de acessar `direcaoDesejada`
 
 ---
 

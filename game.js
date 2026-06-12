@@ -27,9 +27,15 @@ class Game {
         this.dotCount = 0;
         this.introFrame = 0;
         this.somFruta = new Audio('pacman_eatfruit.wav');
+        this.somIntermission = new Audio('pacman_intermission.wav');
+        this.somVidaExtra = new Audio('pacman_extrapac.wav');
         this.fruta = null;
         this.pausado = false;
         this.frameRodada = 0;
+        this.nivel = 1;
+        this.duracaoVitamina = 700;
+        this.tempoIntermissao = 0;
+        this.proximaVidaExtra = 10000; // vida extra a cada 10.000 pontos
     }
 
 	set pacman(value){
@@ -277,24 +283,59 @@ class Game {
         this.somGame.currentTime = 0;
     }
 
+    proximaFase(){
+        this.nivel++;
+        this.passouFase = false;
+        this.dotCount = 0;
+        // ressuscita bolinhas e vitaminas
+        for (var x in this.atores){
+            var a = this.atores[x];
+            if (a instanceof Ponto || a instanceof Vitamina) a.morreu = false;
+        }
+        // some com a fruta, se houver
+        if (this.fruta){ this.fruta.ativa = false; this.fruta._morreu = true; }
+        // fantasmas mais rápidos a cada fase; vitamina dura menos (mínimo 200)
+        [this.azul, this.vermelho, this.verde, this.rosa, this.roxo]
+            .forEach(f => { f.velocidade += 0.1; });
+        this.duracaoVitamina = Math.max(200, 700 - (this.nivel - 1) * 100);
+        // reposiciona Pacman e fantasmas
+        this.reiniciarRodada();
+    }
+
     desenharHUD(){
-        var hY = this.height + 20;
+        var hY = this.height + 25;
         this.ctx.fillStyle = '#000';
         this.ctx.fillRect(0, this.height, this.width, 40);
         this.ctx.fillStyle = '#fff';
-        this.ctx.font = 'bold 16px Arial';
+        this.ctx.font = 'bold 13px Arial';
         this.ctx.textAlign = 'left';
-        this.ctx.fillText('SCORE  ' + this.score, 10, hY);
+        this.ctx.fillText('SCORE ' + this.score, 6, hY);
         this.ctx.textAlign = 'center';
-        this.ctx.fillText('BEST  ' + this.highScore, this.width / 2, hY);
+        this.ctx.fillText('BEST ' + this.highScore, 180, hY);
+        this.ctx.fillStyle = '#00FFFF';
+        this.ctx.fillText('FASE ' + this.nivel, 300, hY);
+        // ícones de vida (mini-pacmans) à direita
         for (var i = 0; i < this.vidas; i++) {
             this.ctx.beginPath();
-            this.ctx.arc(this.width - 90 + i * 28, hY - 6, 9, 0.25 * Math.PI, 1.75 * Math.PI);
-            this.ctx.lineTo(this.width - 90 + i * 28, hY - 6);
+            this.ctx.arc(this.width - 80 + i * 26, hY - 5, 8, 0.25 * Math.PI, 1.75 * Math.PI);
+            this.ctx.lineTo(this.width - 80 + i * 26, hY - 5);
             this.ctx.closePath();
             this.ctx.fillStyle = '#FFD700';
             this.ctx.fill();
         }
+    }
+
+    // Escala o canvas para caber na janela mantendo a proporção
+    ajustarEscala(){
+        if (!this.canvas) return;
+        var escala = Math.min(
+            window.innerWidth  / this.canvas.width,
+            window.innerHeight / this.canvas.height
+        );
+        this.canvas.style.transformOrigin = 'top center';
+        this.canvas.style.transform = 'scale(' + escala + ')';
+        this.canvas.style.display = 'block';
+        this.canvas.style.margin = '0 auto';
     }
 
     init(){
@@ -304,6 +345,8 @@ class Game {
             this.ctx = this.canvas.getContext("2d");
             this.canvas.width = this.width;
             this.canvas.height = this.height + 40; // +40 para HUD
+            this.ajustarEscala();
+            window.addEventListener('resize', () => this.ajustarEscala());
            
             
             //this.canvas.c
@@ -384,6 +427,27 @@ class Game {
             return;
         }
 
+        // INTERMISSÃO entre fases: mostra "FASE COMPLETA" e avança ao próximo nível
+        if (self.inicio && self.passouFase){
+            self.tempoIntermissao++;
+            self.ctx.fillStyle = '#000';
+            self.ctx.fillRect(0, 0, self.width, self.height + 40);
+            self.ctx.fillStyle = '#FFD700';
+            self.ctx.font = 'bold 40px Arial';
+            self.ctx.textAlign = 'center';
+            self.ctx.fillText('FASE ' + self.nivel + ' COMPLETA!', self.width / 2, self.height / 2 - 10);
+            self.ctx.fillStyle = '#fff';
+            self.ctx.font = '22px Arial';
+            self.ctx.fillText('SCORE: ' + self.score, self.width / 2, self.height / 2 + 35);
+            self.ctx.fillStyle = '#00FFFF';
+            self.ctx.font = '18px Arial';
+            self.ctx.fillText('Preparando fase ' + (self.nivel + 1) + '...', self.width / 2, self.height / 2 + 75);
+            if (self.tempoIntermissao > 180){
+                self.proximaFase();
+            }
+            return;
+        }
+
        if (self.inicio && self.pacman.morreu){
             self.tempoDeMorte++;
             self.clear();
@@ -446,7 +510,7 @@ class Game {
             if (self.atores[i] instanceof Vitamina){
                 if (self.atores[i].dead(self.pacman)){
                     self.score += 50;
-                    self.pacman.vitaminado = 700;
+                    self.pacman.vitaminado = self.duracaoVitamina;
                     self.fantasmasComidos = 0;
                     for (var x in self.atores){
                         if (self.atores[x] instanceof Fantasma)
@@ -465,22 +529,13 @@ class Game {
                 }
                 if  (pontosVivos==0){
                     self.passouFase = true;
+                    self.tempoIntermissao = 0;
                     if (self.score > self.highScore) {
                         self.highScore = self.score;
                         localStorage.setItem('pacman_highscore', self.highScore);
                     }
                     self.somGame.pause();
-                    clearInterval(self.intervalId);
-                    self.ctx.fillStyle = '#000';
-                    self.ctx.fillRect(0, 0, self.width, self.height + 40);
-                    self.ctx.fillStyle = '#FFD700';
-                    self.ctx.font = 'bold 44px Arial';
-                    self.ctx.textAlign = 'center';
-                    self.ctx.fillText('VOCÊ VENCEU!', self.width / 2, self.height / 2 - 20);
-                    self.ctx.fillStyle = '#fff';
-                    self.ctx.font = '24px Arial';
-                    self.ctx.fillText('SCORE: ' + self.score, self.width / 2, self.height / 2 + 30);
-                    self.ctx.fillText('BEST: ' + self.highScore, self.width / 2, self.height / 2 + 65);
+                    self.somIntermission.play();
                     return;
                 }
 
@@ -560,6 +615,12 @@ class Game {
                     
             self.atores[i].updatePosicaoXY();
             self.atores[i].paint();
+        }
+        // Vida extra ao atingir cada marco de pontuação
+        if (self.score >= self.proximaVidaExtra){
+            self.vidas++;
+            self.somVidaExtra.play();
+            self.proximaVidaExtra += 10000;
         }
         self.desenharHUD();
         }
