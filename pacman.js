@@ -86,15 +86,23 @@ class Pacman extends Ator {
 		default: break;
 		}
 		if (this.fraco){
-			top = 0;			 
+			top = 0;
 			left = 384;
 		}
 		if (this.morreu){
-			if (this.imagem<400)
-				this.imagem = this.imagem +1;
-			else
-				this.imagem = 0;
-			//this.tempoOlhos = 0;
+			// Animação de morte: boca abre até o corpo desaparecer (desenhada no canvas)
+			var ctx = this.canvas;
+			this.morteProgresso = (this.morteProgresso || 0) + 0.015;
+			var p = Math.min(this.morteProgresso, 1);
+			var cx = this.left + 16, cy = this.top + 16, r = 16;
+			var mouth = p * Math.PI; // meia-abertura cresce até fechar o corpo
+			ctx.beginPath();
+			ctx.moveTo(cx, cy);
+			ctx.arc(cx, cy, r, -Math.PI / 2 + mouth, 3 * Math.PI / 2 - mouth);
+			ctx.closePath();
+			ctx.fillStyle = '#FFD700';
+			ctx.fill();
+			return; // não desenha o sprite normal
 		}
 
 		for (var i=0; i<=25; i++){

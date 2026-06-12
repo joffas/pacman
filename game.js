@@ -28,6 +28,8 @@ class Game {
         this.introFrame = 0;
         this.somFruta = new Audio('pacman_eatfruit.wav');
         this.fruta = null;
+        this.pausado = false;
+        this.frameRodada = 0;
     }
 
 	set pacman(value){
@@ -42,6 +44,11 @@ class Game {
         if (evt.keyCode==13){
             this.inicio = true;
             this.somInicio.play();
+        }
+        // P ou Esc: pausa/despausa (só durante o jogo, não na morte)
+        if ((evt.keyCode==80 || evt.keyCode==27) && this.inicio && this.pacman && !this.pacman.morreu){
+            this.pausado = !this.pausado;
+            if (this.pausado) this.somGame.pause();
         }
         if (this.pacman)
             this.pacman.direcaoDesejada = evt.keyCode;
@@ -254,14 +261,19 @@ class Game {
         this.pacman._direcaoDesejada = 0;
         this.pacman.vitaminado = 0;
         this.pacman.imagem = 318;
+        this.pacman.morteProgresso = 0;
         fantasmas.forEach(f => {
-            f.left   = f.__left;
-            f.top    = f.__top;
-            f.morreu = false;
-            f.fraco  = false;
+            f.left     = f.__left;
+            f.top      = f.__top;
+            f.morreu   = false;
+            f.fraco    = false;
+            f.piscando = false;
+            f.preso    = f.tempoSaida > 0;
         });
         this.tempoDeMorte = 0;
         this.fantasmasComidos = 0;
+        this.frameRodada = 0;
+        this.pausado = false;
         this.somGame.currentTime = 0;
     }
 
@@ -334,6 +346,15 @@ class Game {
             this.atores.push(this.roxo);
 
 
+            // Personalidades e ordem de saída da casa (escalonada)
+            this.vermelho.perfil = 'cacador';  this.vermelho.tempoSaida = 0;
+            this.rosa.perfil     = 'emboscar'; this.rosa.tempoSaida     = 60;
+            this.azul.perfil     = 'cacador';  this.azul.tempoSaida     = 120;
+            this.verde.perfil    = 'timido';   this.verde.tempoSaida    = 180;
+            this.roxo.perfil     = 'cacador';  this.roxo.tempoSaida     = 240;
+            [this.vermelho, this.rosa, this.azul, this.verde, this.roxo]
+                .forEach(f => { f.preso = f.tempoSaida > 0; });
+
             this.fruta = new Fruta('fruta', this.ctx);
             this.atores.push(this.fruta);
 
@@ -345,8 +366,24 @@ class Game {
         if (!self.inicio){
             self.desenharIntro();
         }
-        
-        
+
+        // PAUSA: redesenha o estado atual com overlay e congela
+        if (self.inicio && self.pausado){
+            self.clear();
+            for (var x in self.atores) self.atores[x].paint();
+            self.desenharHUD();
+            self.ctx.fillStyle = 'rgba(0,0,0,0.6)';
+            self.ctx.fillRect(0, 0, self.width, self.height);
+            self.ctx.fillStyle = '#FFD700';
+            self.ctx.font = 'bold 44px Arial';
+            self.ctx.textAlign = 'center';
+            self.ctx.fillText('PAUSADO', self.width / 2, self.height / 2);
+            self.ctx.fillStyle = '#888';
+            self.ctx.font = '16px Arial';
+            self.ctx.fillText('P para continuar', self.width / 2, self.height / 2 + 36);
+            return;
+        }
+
        if (self.inicio && self.pacman.morreu){
             self.tempoDeMorte++;
             self.clear();
@@ -386,6 +423,15 @@ class Game {
            self.clear();
            self.tentarVirar();
 
+           // Saída escalonada da casa + aviso de piscar no fim da vitamina
+           self.frameRodada++;
+           var fants = [self.azul, self.vermelho, self.verde, self.rosa, self.roxo];
+           var piscar = self.pacman.vitaminado > 0 && self.pacman.vitaminado < 200;
+           fants.forEach(f => {
+               if (f.preso && self.frameRodada >= f.tempoSaida) f.preso = false;
+               f.piscando = piscar;
+           });
+
            // Countdown vitaminado: uma vez por frame (não por ator)
            if (self.pacman.vitaminado > 0) {
                self.pacman.vitaminado--;
@@ -419,7 +465,23 @@ class Game {
                 }
                 if  (pontosVivos==0){
                     self.passouFase = true;
-                    alert('passou de faase uhhuuuu!!!');
+                    if (self.score > self.highScore) {
+                        self.highScore = self.score;
+                        localStorage.setItem('pacman_highscore', self.highScore);
+                    }
+                    self.somGame.pause();
+                    clearInterval(self.intervalId);
+                    self.ctx.fillStyle = '#000';
+                    self.ctx.fillRect(0, 0, self.width, self.height + 40);
+                    self.ctx.fillStyle = '#FFD700';
+                    self.ctx.font = 'bold 44px Arial';
+                    self.ctx.textAlign = 'center';
+                    self.ctx.fillText('VOCÊ VENCEU!', self.width / 2, self.height / 2 - 20);
+                    self.ctx.fillStyle = '#fff';
+                    self.ctx.font = '24px Arial';
+                    self.ctx.fillText('SCORE: ' + self.score, self.width / 2, self.height / 2 + 30);
+                    self.ctx.fillText('BEST: ' + self.highScore, self.width / 2, self.height / 2 + 65);
+                    return;
                 }
 
             }
@@ -480,13 +542,11 @@ class Game {
             else
                 if (self.atores[i] instanceof Bloco){
                     self.pacman.colidiu(self.atores[i]);
-                    self.azul.tomadaDeDirecao(self.azul.colidiu(self.atores[i]));
-                    self.vermelho.tomadaDeDirecao(self.vermelho.colidiu(self.atores[i]));
-                    self.verde.tomadaDeDirecao(self.verde.colidiu(self.atores[i]));
-                    self.rosa.tomadaDeDirecao(self.rosa.colidiu(self.atores[i]));
-                    self.roxo.tomadaDeDirecao(self.roxo.colidiu(self.atores[i]));
-                    //this.azul.direcao = 38
-                    //console.log('colidiu');
+                    self.azul.aoColidirBloco(self.atores[i], self.pacman);
+                    self.vermelho.aoColidirBloco(self.atores[i], self.pacman);
+                    self.verde.aoColidirBloco(self.atores[i], self.pacman);
+                    self.rosa.aoColidirBloco(self.atores[i], self.pacman);
+                    self.roxo.aoColidirBloco(self.atores[i], self.pacman);
                 }
             
 
