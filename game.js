@@ -238,19 +238,19 @@ class Game {
             return;
         }
 
-        // 2. Ajustes perpendiculares ±8px (cobre drift de float sem pular corredores)
-        for (var off = 2; off <= 8; off += 2) {
-            var tlP = isVertical ? oldLeft + off : oldLeft;
-            var ttP = isVertical ? oldTop        : oldTop + off;
-            if (testPos(tlP, ttP)) {
-                if (isVertical) this.pacman.left = tlP; else this.pacman.top = ttP;
-                this.pacman._direcao = d;
-                return;
-            }
-            var tlN = isVertical ? oldLeft - off : oldLeft;
-            var ttN = isVertical ? oldTop        : oldTop - off;
-            if (testPos(tlN, ttN)) {
-                if (isVertical) this.pacman.left = tlN; else this.pacman.top = ttN;
+        // 2. Snap à grade de 8px no eixo perpendicular (máx ±8px).
+        // A posição é fracionária (velocidade 1.2), então offsets inteiros
+        // nunca alinhavam exato com corredores de 32px — testa os múltiplos
+        // de 8 mais próximos, que é onde os corredores começam.
+        var base     = isVertical ? oldLeft : oldTop;
+        var alinhado = Math.round(base / 8) * 8;
+        for (var k = -1; k <= 1; k++) {
+            var c = alinhado + k * 8;
+            if (Math.abs(c - base) > 8.01) continue;
+            var tl = isVertical ? c : oldLeft;
+            var tt = isVertical ? oldTop : c;
+            if (testPos(tl, tt)) {
+                if (isVertical) this.pacman.left = tl; else this.pacman.top = tt;
                 this.pacman._direcao = d;
                 return;
             }
