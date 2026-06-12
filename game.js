@@ -484,22 +484,104 @@ class Game {
             return;
         }
 
-        // INTERMISSÃO entre fases: mostra "FASE COMPLETA" e avança ao próximo nível
+        // INTERMISSÃO entre fases: animação e avança ao próximo nível
         if (self.inicio && self.passouFase){
             self.tempoIntermissao++;
-            self.ctx.fillStyle = '#000';
-            self.ctx.fillRect(0, 0, self.width, self.height + 40);
-            self.ctx.fillStyle = '#FFD700';
-            self.ctx.font = 'bold 40px Arial';
-            self.ctx.textAlign = 'center';
-            self.ctx.fillText('FASE ' + self.nivel + ' COMPLETA!', self.width / 2, self.height / 2 - 10);
-            self.ctx.fillStyle = '#fff';
-            self.ctx.font = '22px Arial';
-            self.ctx.fillText('SCORE: ' + self.score, self.width / 2, self.height / 2 + 35);
-            self.ctx.fillStyle = '#00FFFF';
-            self.ctx.font = '18px Arial';
-            self.ctx.fillText('Preparando fase ' + (self.nivel + 1) + '...', self.width / 2, self.height / 2 + 75);
-            if (self.tempoIntermissao > 180){
+            var f   = self.tempoIntermissao;
+            var ctx = self.ctx;
+            var W   = self.width, H = self.height + 40;
+
+            // fundo escurecendo da cor da fase para preto
+            var fade = Math.min(f / 30, 1);
+            ctx.fillStyle = '#000';
+            ctx.fillRect(0, 0, W, H);
+
+            // estrelas de fundo animadas (reusa as da intro)
+            if (!self._introStars) {
+                self._introStars = [];
+                for (var s = 0; s < 35; s++)
+                    self._introStars.push({ x: Math.random()*W, y: Math.random()*H,
+                        r: Math.random()*2+1, phase: Math.random()*Math.PI*2 });
+            }
+            for (var s = 0; s < self._introStars.length; s++) {
+                var st = self._introStars[s];
+                var a  = (0.15 + 0.2*Math.sin(f*0.05+st.phase)) * fade;
+                ctx.beginPath();
+                ctx.arc(st.x, st.y, st.r, 0, Math.PI*2);
+                ctx.fillStyle = 'rgba(255,210,0,'+a+')';
+                ctx.fill();
+            }
+
+            // título quicando "FASE N COMPLETA!"
+            var entrar = Math.min(f / 18, 1);
+            var bounce = Math.sin(f * 0.12) * (f < 40 ? 0 : 6) * entrar;
+            ctx.save();
+            ctx.translate(W/2, H/2 - 60 + (1-entrar)*120);
+            ctx.scale(entrar, entrar);
+            ctx.textAlign = 'center';
+            ctx.fillStyle = '#FFD700';
+            ctx.font = 'bold 44px Arial';
+            ctx.shadowColor = '#FF8800';
+            ctx.shadowBlur = 18;
+            ctx.fillText('FASE ' + self.nivel + ' COMPLETA!', 0, bounce);
+            ctx.restore();
+
+            // pontuação aparece depois de 20 frames
+            if (f > 20) {
+                var ap = Math.min((f-20)/15, 1);
+                ctx.globalAlpha = ap;
+                ctx.textAlign = 'center';
+                ctx.fillStyle = '#fff';
+                ctx.font = 'bold 26px Arial';
+                ctx.shadowColor = 'transparent';
+                ctx.fillText('SCORE: ' + self.score, W/2, H/2 + 20);
+                ctx.globalAlpha = 1;
+            }
+
+            // barra de progresso para próxima fase
+            if (f > 40) {
+                var prog = Math.min((f - 40) / 140, 1);
+                var bx = W/2 - 120, bw = 240, by = H/2 + 65, bh = 14;
+                ctx.fillStyle = '#222';
+                ctx.beginPath(); ctx.roundRect(bx, by, bw, bh, 7); ctx.fill();
+                ctx.fillStyle = '#00FFFF';
+                ctx.beginPath(); ctx.roundRect(bx, by, bw*prog, bh, 7); ctx.fill();
+                ctx.fillStyle = '#aaa';
+                ctx.font = '13px monospace';
+                ctx.textAlign = 'center';
+                ctx.fillText('FASE ' + (self.nivel+1) + '...', W/2, by + bh + 18);
+            }
+
+            // fogos: partículas simples
+            if (!self._particulas) self._particulas = [];
+            if (f === 1 || f === 25 || f === 50) {
+                var cores = ['#FFD700','#FF4444','#00FFFF','#FF88FF','#88FF88'];
+                for (var p = 0; p < 30; p++) {
+                    var ang = Math.random()*Math.PI*2;
+                    var spd = Math.random()*4+1;
+                    self._particulas.push({
+                        x: W/2 + (Math.random()-0.5)*80,
+                        y: H/2 - 60,
+                        vx: Math.cos(ang)*spd, vy: Math.sin(ang)*spd - 2,
+                        cor: cores[Math.floor(Math.random()*cores.length)],
+                        vida: 40 + Math.random()*40
+                    });
+                }
+            }
+            self._particulas = self._particulas.filter(p => {
+                p.x += p.vx; p.y += p.vy; p.vy += 0.15; p.vida--;
+                if (p.vida <= 0) return false;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, 3, 0, Math.PI*2);
+                ctx.fillStyle = p.cor;
+                ctx.globalAlpha = p.vida/60;
+                ctx.fill();
+                ctx.globalAlpha = 1;
+                return true;
+            });
+
+            if (f > 180){
+                self._particulas = [];
                 self.proximaFase();
             }
             return;

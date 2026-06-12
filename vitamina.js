@@ -1,14 +1,17 @@
 class Vitamina extends Ator {
-	
+
 	constructor(tipoAtor, ctx) {
 		super(tipoAtor, ctx);
 		this.tipo = tipoAtor;
-		this.spriteName = 'cenario.png';		
+		this.spriteName = 'cenario.png';
 		this.height = 16;
 		this.width = 16;
         this.tempoOlhos = 0;
         this.imagem = 228;
-	}	
+	}
+
+	// Vitaminas são estáticas — não herdam o movimento-para-spawn do Ator
+	updatePosicaoXY() {}	
 
 	paint(){
 		super.paint;
