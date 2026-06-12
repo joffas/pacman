@@ -283,15 +283,32 @@ class Game {
         this.somGame.currentTime = 0;
     }
 
+    // Marca como mortos os pontos cujo centro cai dentro de um bloco visível.
+    // Chamado na init e ao avançar de fase (ressurreição recria todos os pontos).
+    filtrarPontosInvalidos(){
+        this.atores.forEach(ponto => {
+            if (!(ponto instanceof Ponto) || ponto.morreu) return;
+            var cx = ponto.left + ponto.width  / 2;
+            var cy = ponto.top  + ponto.height / 2;
+            var dentro = this.atores.some(b =>
+                b instanceof Bloco && b.pintar !== false &&
+                cx > b.left && cx < b.left + b.width &&
+                cy > b.top  && cy < b.top  + b.height
+            );
+            if (dentro) ponto.morreu = true;
+        });
+    }
+
     proximaFase(){
         this.nivel++;
         this.passouFase = false;
         this.dotCount = 0;
-        // ressuscita bolinhas e vitaminas
+        // ressuscita bolinhas e vitaminas; elimina de novo os que estão em paredes
         for (var x in this.atores){
             var a = this.atores[x];
             if (a instanceof Ponto || a instanceof Vitamina) a.morreu = false;
         }
+        this.filtrarPontosInvalidos();
         // some com a fruta, se houver
         if (this.fruta){ this.fruta.ativa = false; this.fruta._morreu = true; }
         // fantasmas mais rápidos a cada fase; vitamina dura menos (mínimo 200)
@@ -435,6 +452,7 @@ class Game {
 
             this.fruta = new Fruta('fruta', this.ctx);
             this.atores.push(this.fruta);
+            this.filtrarPontosInvalidos(); // elimina pontos dentro de paredes
 
             this.intervalId = setInterval(this.draw, 10, this);
         }
