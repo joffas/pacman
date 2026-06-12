@@ -219,17 +219,16 @@ class Game {
         var isVertical = (d == _CIMA || d == _BAIXO);
 
         // Testa se a posição (tl, tt) permite virar para d.
-        // Usa hitbox 1px menor (inset) para não tratar borda-tocando como colisão.
+        // Usa <= / >= para que borda-tocando-borda não seja colisão
+        // (sem alterar o hitbox real do personagem).
         var testPos = (tl, tt) => {
-            this.pacman.left    = tl + (d == _DIREITA ? vel : d == _ESQUERDA ? -vel : 0) + 1;
-            this.pacman.top     = tt + (d == _BAIXO   ? vel : d == _CIMA     ? -vel : 0) + 1;
-            this.pacman._width  = 30;
-            this.pacman._height = 30;
-            var hit = this.atores.some(a => a instanceof Bloco && this.pacman.detectarColisao(a));
-            this.pacman._width  = 32;
-            this.pacman._height = 32;
-            this.pacman.left    = oldLeft;
-            this.pacman.top     = oldTop;
+            var nl = tl + (d == _DIREITA ? vel : d == _ESQUERDA ? -vel : 0);
+            var nt = tt + (d == _BAIXO   ? vel : d == _CIMA     ? -vel : 0);
+            var hit = this.atores.some(a => {
+                if (!(a instanceof Bloco)) return false;
+                return !(nl + 32 <= a.left || nl >= a.left + a.width ||
+                         nt + 32 <= a.top  || nt >= a.top  + a.height);
+            });
             return !hit;
         };
 
@@ -239,8 +238,8 @@ class Game {
             return;
         }
 
-        // 2. Ajustes perpendiculares — cobre até metade da largura do corredor (±16 px)
-        for (var off = 2; off <= 16; off += 2) {
+        // 2. Ajustes perpendiculares ±8px (cobre drift de float sem pular corredores)
+        for (var off = 2; off <= 8; off += 2) {
             var tlP = isVertical ? oldLeft + off : oldLeft;
             var ttP = isVertical ? oldTop        : oldTop + off;
             if (testPos(tlP, ttP)) {
@@ -624,11 +623,9 @@ class Game {
             else
                 if (self.atores[i] instanceof Bloco){
                     self.pacman.colidiu(self.atores[i]);
-                    self.azul.aoColidirBloco(self.atores[i], self.pacman);
-                    self.vermelho.aoColidirBloco(self.atores[i], self.pacman);
-                    self.verde.aoColidirBloco(self.atores[i], self.pacman);
-                    self.rosa.aoColidirBloco(self.atores[i], self.pacman);
-                    self.roxo.aoColidirBloco(self.atores[i], self.pacman);
+                    [self.azul, self.vermelho, self.verde, self.rosa, self.roxo].forEach(f => {
+                        if (!f.preso && !f.morreu) f.aoColidirBloco(self.atores[i], self.pacman);
+                    });
                 }
             
 

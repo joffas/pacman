@@ -76,6 +76,7 @@ class Fantasma extends Ator {
 	}
 
 	aoColidirBloco(bloco, pacman) {
+		if (bloco.pintar === false) return; // ghosts pass through invisible house barriers
 		var dir = this.colidiu(bloco);
 		if (dir) this.escolherDirecao(pacman);
 	}
