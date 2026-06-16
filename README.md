@@ -1,5 +1,6 @@
 # Pacman — JavaScript / ECMAScript 6
 
+[![Jogar agora](https://img.shields.io/badge/🕹️-Jogar%20agora-brightgreen)](https://joffas.github.io/pacman/)
 [![TODO](https://img.shields.io/badge/📋-TODO-blue)](TODO.md)
 
 Projeto iniciado em 2016 como exercício prático de aprendizado de JavaScript puro usando Canvas 2D e orientação a objetos com ES6 Classes.
