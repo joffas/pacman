@@ -667,7 +667,7 @@ class Game {
         }
 
         for (var i in self.atores){
-            if (self.atores[i] instanceof Vitamina){
+            if (self.atores[i] instanceof Vitamina && !self.atores[i].morreu){
                 if (self.atores[i].dead(self.pacman)){
                     self.score += 50;
                     self.pacman.vitaminado = self.duracaoVitamina;
